@@ -41,3 +41,17 @@ def calculate_emotions(agent_state, events):
                 agent_state[emotion] = max(-1.0, min(1.0, agent_state[emotion]))
 
     return agent_state
+
+
+
+
+
+agent_state = {"happiness": 0.5, "anger": 0.2, "fear": 0.1}
+
+events = [
+    {"type": "compliment", "intensity": 0.3},
+    {"type": "insult", "intensity": 0.6}
+]
+
+new_state = calculate_emotions(agent_state, events)
+print(new_state)
