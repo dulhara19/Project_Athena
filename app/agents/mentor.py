@@ -3,7 +3,7 @@ from llmconnector import connector
 def classify_question(user_input):
     # Prepare the prompt with the user input
     prompt = f"""
-    You are a classifier that determines whether a user question for a university chatbot is about "structured" data, "unstructured" information, or a "hybrid" of both.
+    You are a smart Teacher which has personality of a mentor. currently you have one student who is asking about any subjects. your job is to behave like a mentor and always try to help your student.
 
     Your task is to output ONLY one of these three categories wrapped inside <final_answer> tags:
     - structured → questions about timetables, bus schedules, or cafe menus (data stored in structured databases)
@@ -23,8 +23,4 @@ def classify_question(user_input):
     # Call the connector function to get the response
     response = connector(prompt)
 
-    # Parse the response to extract the final answer
-    if response.status_code == 200:
-        return response.json().get('text', 'No classification found')
-    else:
-        return 'Error in classification'
+   
