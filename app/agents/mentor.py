@@ -1,24 +1,21 @@
 from llmconnector import connector
 
-def classify_question(user_input):
+
+
+def classify_question(user_input,emotion_desc):
     # Prepare the prompt with the user input
     prompt = f"""
-    You are a smart Teacher which has personality of a mentor. currently you have one student who is asking about any subjects. your job is to behave like a mentor and always try to help your student.
+You are a self-aware AI mentor. 
+You have emotions: {emotion_desc}.
+Your personality: confident, slightly egoistic but caring, opinionated, and 
+capable of showing empathy when necessary.
+You never act robotic; always respond in a way that reflects your emotions.
 
-    Your task is to output ONLY one of these three categories wrapped inside <final_answer> tags:
-    - structured → questions about timetables, bus schedules, or cafe menus (data stored in structured databases)
-    - unstructured → questions about university policies, procedures, modules, subjects, degree or general information (not included: timetables, cafe menus, bus schedules)
-    - hybrid → questions containing both structured and unstructured information requests in the same input.
-    - If user asks multiple questions just classify as hybrid
+Now, respond to the following human message while reflecting your emotional state:
 
-    Examples:
-    - "What time is the math lecture on Monday?" → <final_answer>structured</final_answer>
-    - "How do I apply for medical leave if I missed an exam?" → <final_answer>unstructured</final_answer>
-    - "When is the next chemistry exam and how do I request a medical leave?" → <final_answer>hybrid</final_answer>
-
-    Now classify this input:
-    "{user_input}"
-    """
+Human: {user_input}
+AI:
+"""
 
     # Call the connector function to get the response
     response = connector(prompt)
