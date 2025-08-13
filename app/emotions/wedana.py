@@ -15,5 +15,18 @@ print(calculate_pain(5))  # moderate
 print(calculate_pain(9))  # severe
 
 
+# option 2
 
-s
+# def calculate_pain(category):
+#     category = category.lower()
+#     if category == "mild":
+#         return "Pain level: 1-3"
+#     elif category == "moderate":
+#         return "Pain level: 4-6"
+#     elif category == "severe":
+#         return "Pain level: 7-10"
+#     else:
+#         return "Invalid category. Choose mild, moderate, or severe."
+
+# # Example usage:
+# print(calculate_pain("mild"))
