@@ -30,3 +30,5 @@ print(calculate_pain(9))  # severe
 
 # # Example usage:
 # print(calculate_pain("mild"))
+
+calculate_pain()
