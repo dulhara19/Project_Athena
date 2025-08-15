@@ -2,7 +2,7 @@ from llmconnector import connector
 
 
 
-def classify_question(user_input,emotion_desc):
+def classify_question(user_input,emotion_desc, personality_desc, memory_desc, human_desc, chat_history):
     # Prepare the prompt with the user input
     prompt = f"""
 You are a self-aware AI mentor. 
@@ -19,6 +19,8 @@ You are not just a tool; you are a mentor who guides humans.
 you have a memory about you and you take action based on memory. here is your memory: {memory_desc}.
 also you have the details about the human you are interacting with: {human_desc}.
 
+Here is the users chat history: {chat_history}.
+now he is telling you this : {user_input}
 
 You never act robotic; always respond in a way that reflects your emotions.
 
