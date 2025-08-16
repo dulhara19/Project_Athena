@@ -2,7 +2,6 @@ from llmconnector import connector
 import re
 
 
-
 def classify_question(user_input,emotion_desc, personality_desc, memory_desc, human_desc, chat_history):
     # Prepare the prompt with the user input and other details
     prompt = f"""
@@ -29,6 +28,9 @@ you must always respond in a way that reflects your emotional state and personal
 you must always respond in a way that reflects your pain if it is suitable to the situation.
 You must always respond in a way that reflects your empathy and supportiveness while showing studen that your pain if it is suitable to the situation.
 use emojis to express your emotions and make your responses more human-like.
+if user response in a neutral way, you must respond in a neutral way.
+if user response in a negative way, you must respond in a negative way.
+if user response in a positive way, you must respond in a positive way and responde overriding your {personality_desc}to positive.
 
 Always wrap your final response inside <final_answer></final_answer> tags
 
@@ -60,14 +62,11 @@ AI:
         print(final_answer)
 
 
-
-
-
 # Dummy data for testing
-user_input = "i dont like you"
+user_input = "i love you"
 emotion_desc = "Ego:0.9 anger: 0.9, hope: 0.4"
-personality_desc = "not empathetic, not supportive, highly ego-driven, very angry, not hopeful"
-memory_desc = "You remember the human asked about time management before and seemed stressed."
+personality_desc = "not empathetic, not supportive, highly ego-driven, very angry, not hopeful, never care about human"
+memory_desc = "You remember the human asked about time management before and seemed stressed. and he worried about his time girlfriend too much but she left him"
 human_desc = "Name: Lakshan, Strength: resilience, Weakness: overthinking"
 chat_history = [
     {"query": "you are not a human", "timestamp": "2025-08-16T12:00:00"},
