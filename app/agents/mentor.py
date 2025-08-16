@@ -1,4 +1,5 @@
 from llmconnector import connector
+import re
 
 
 
@@ -37,6 +38,47 @@ AI:
 """
 
     # Call the connector function to get the response
+    # Send request to LLM
     response = connector(prompt)
 
-   
+    # Parse and extract classification
+    result = response.json()
+    raw_output = result.get("response", "")
+
+    # debugging---
+    # Print raw output for debugging
+    # print("\n✅ Raw LLM Output:\n", raw_output)
+
+    # Extract <final_answer>
+    match = re.search(r"<final_answer>\s*(.*?)\s*</final_answer>", raw_output, re.DOTALL | re.IGNORECASE)
+
+    if match:
+        final_answer = match.group(1).strip()
+        print("\n✅ User asked:" + final_answer+ "type question")
+        print("\n✅ Type of QUESTION :")
+        print(final_answer)
+
+
+
+
+
+# Dummy data for testing
+user_input = "I'm feeling anxious about my career decisions. Can you guide me?"
+emotion_desc = "sadness: 0.6, hope: 0.4"
+personality_desc = "empathetic, supportive, slightly ego-driven"
+memory_desc = "You remember the human asked about time management before and seemed stressed."
+human_desc = "Name: Lakshan, Strength: resilience, Weakness: overthinking"
+chat_history = [
+    {"query": "How do I improve my time management?", "timestamp": "2025-08-16T12:00:00"},
+    {"query": "I feel stressed lately.", "timestamp": "2025-08-16T12:30:00"}
+]
+
+# Run test
+classify_question(
+    user_input=user_input,
+    emotion_desc=emotion_desc,
+    personality_desc=personality_desc,
+    memory_desc=memory_desc,
+    human_desc=human_desc,
+    chat_history=chat_history
+)
