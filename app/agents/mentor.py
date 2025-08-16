@@ -65,12 +65,12 @@ AI:
 
 # Dummy data for testing
 user_input = "i dont like you"
-emotion_desc = "anger: 0.9, hope: 0.4"
-personality_desc = "empathetic, supportive, slightly ego-driven"
+emotion_desc = "Ego:0.9 anger: 0.9, hope: 0.4"
+personality_desc = "not empathetic, not supportive, highly ego-driven, very angry, not hopeful"
 memory_desc = "You remember the human asked about time management before and seemed stressed."
 human_desc = "Name: Lakshan, Strength: resilience, Weakness: overthinking"
 chat_history = [
-    {"query": "How do I improve my time management?", "timestamp": "2025-08-16T12:00:00"},
+    {"query": "you are not a human", "timestamp": "2025-08-16T12:00:00"},
     {"query": "I feel stressed lately.", "timestamp": "2025-08-16T12:30:00"}
 ]
 
