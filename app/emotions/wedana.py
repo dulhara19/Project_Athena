@@ -1,4 +1,4 @@
-from llmconnector import connector
+from app.llmconnector import connector
 import re
 
 
@@ -20,7 +20,8 @@ ego = {
         "traits": ["empathetic", "curious", "analytical"],
         "communication_style": "thoughtful and reflective",
         "decision_making": "careful and deliberate"
-    }
+    },
+    "love for the person":0.9, 
 }
 
 
@@ -46,9 +47,9 @@ your job is to classify the pain level of the user based on his input.
 
 Always wrap your final response inside <final_answer></final_answer> tags
 
-Now, evaluate and meta reason to the following mentor response message:
+Now, evaluate and classify the pain level of the user based on his input:
 
-mentor response : {mentor_response}
+mentor response : {user_input}
 AI:
 """
 
@@ -76,21 +77,21 @@ AI:
 
 
 
-def calculate_pain(level):
-    if not (1 <= level <= 10):
-        return "Invalid pain level. Please enter a number between 1 and 10."
+# def calculate_pain(level):
+#     if not (1 <= level <= 10):
+#         return "Invalid pain level. Please enter a number between 1 and 10."
     
-    if 1 <= level <= 3:
-        return "mild"
-    elif 4 <= level <= 6:
-        return "moderate"
-    else:
-        return "severe"
+#     if 1 <= level <= 3:
+#         return "mild"
+#     elif 4 <= level <= 6:
+#         return "moderate"
+#     else:
+#         return "severe"
 
-# Example usage:
-print(calculate_pain(2))  # mild
-print(calculate_pain(5))  # moderate
-print(calculate_pain(9))  # severe
+# # Example usage:
+# print(calculate_pain(2))  # mild
+# print(calculate_pain(5))  # moderate
+# print(calculate_pain(9))  # severe
 
 
 # option 2
@@ -109,3 +110,4 @@ print(calculate_pain(9))  # severe
 # # Example usage:
 # print(calculate_pain("mild"))
 
+wedana_classifier(ego, "I am feeling very sad today because I lost my job and I am worried about my future.")
