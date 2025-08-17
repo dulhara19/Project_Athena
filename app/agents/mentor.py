@@ -1,6 +1,6 @@
 from llmconnector import connector
 import re
-import requests
+from meta import meta_reasoner
 
 
 def classify_question(user_input,emotion_desc, personality_desc, memory_desc, human_desc, chat_history):
@@ -59,8 +59,8 @@ AI:
     if match:
         final_answer = match.group(1).strip()
         print("\n✅ User asked:" + user_input)
-        print("\n✅ answer :")
-        print(final_answer)
+        # print("\n✅ answer :")
+        # print(final_answer)
         return final_answer
 
 
@@ -75,13 +75,18 @@ chat_history = [
     {"query": "I feel stressed lately.", "timestamp": "2025-08-16T12:30:00"}
 ]
 
-# # Run test
-# response=classify_question(
-#     user_input=user_input,
-#     emotion_desc=emotion_desc,
-#     personality_desc=personality_desc,
-#     memory_desc=memory_desc,
-#     human_desc=human_desc,
-#     chat_history=chat_history
-# )
-# print(response)
+# Run test
+response=classify_question(
+    user_input=user_input,
+    emotion_desc=emotion_desc,
+    personality_desc=personality_desc,
+    memory_desc=memory_desc,
+    human_desc=human_desc,
+    chat_history=chat_history
+)
+print("\n✅ answer :")
+print(response)
+
+meta_res=meta_reasoner(response, emotion_desc, personality_desc, memory_desc, human_desc, chat_history,user_input)
+print("\n✅ Meta Reasonng :")
+print(meta_res)
