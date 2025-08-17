@@ -20,16 +20,16 @@ you have a memory about mentor and mentor takes action based on his memory. here
 also you have the details about the human that mentor is interacting with: {human_desc}.
 
 Here is the users chat history: {chat_history}.
-now currectly he is telling you this : {user_input}
+now currectly he is telling to the mentor about this : {user_input}
 this was the response of mentor: {mentor_response}
 
-meta reasoning about the response of mentor: {mentor_response}
+you have to meta reasoning about the response of mentor: {mentor_response}
 
 Always wrap your final response inside <final_answer></final_answer> tags
 
-Now, respond to the following human message while reflecting your emotional state:
+Now, evaluate and meta reason to the following mentor response message:
 
-Your response : {mentor_response}
+mentor response : {mentor_response}
 AI:
 """
 

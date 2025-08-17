@@ -63,7 +63,6 @@ AI:
         # print(final_answer)
         return final_answer
 
-
 # Dummy data for testing
 user_input = "i love you"
 emotion_desc = "Ego:0.9 anger: 0.9, hope: 0.4"
