@@ -1,5 +1,6 @@
 from llmconnector import connector
 import re
+import requests
 
 
 def classify_question(user_input,emotion_desc, personality_desc, memory_desc, human_desc, chat_history):
@@ -57,15 +58,16 @@ AI:
 
     if match:
         final_answer = match.group(1).strip()
-        print("\n✅ User asked:" + user_input+ "type question")
+        print("\n✅ User asked:" + user_input)
         print("\n✅ answer :")
         print(final_answer)
+        return final_answer
 
 
 # Dummy data for testing
 user_input = "i love you"
 emotion_desc = "Ego:0.9 anger: 0.9, hope: 0.4"
-personality_desc = "not empathetic, not supportive, highly ego-driven, very angry, not hopeful, never care about human"
+personality_desc = "not empathetic, not supportive, highly ego-driven, very angry, not hopeful, never care about human, blame in a bad way using bad words"
 memory_desc = "You remember the human asked about time management before and seemed stressed. and he worried about his time girlfriend too much but she left him"
 human_desc = "Name: Lakshan, Strength: resilience, Weakness: overthinking"
 chat_history = [
@@ -73,13 +75,13 @@ chat_history = [
     {"query": "I feel stressed lately.", "timestamp": "2025-08-16T12:30:00"}
 ]
 
-# Run test
-response=classify_question(
-    user_input=user_input,
-    emotion_desc=emotion_desc,
-    personality_desc=personality_desc,
-    memory_desc=memory_desc,
-    human_desc=human_desc,
-    chat_history=chat_history
-)
-print(response)
+# # Run test
+# response=classify_question(
+#     user_input=user_input,
+#     emotion_desc=emotion_desc,
+#     personality_desc=personality_desc,
+#     memory_desc=memory_desc,
+#     human_desc=human_desc,
+#     chat_history=chat_history
+# )
+# print(response)
