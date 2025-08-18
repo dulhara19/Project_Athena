@@ -1,9 +1,12 @@
 from app.llmconnector import connector
 import re
 
-
 ego = {
     "self esteem": 0.8,
+    "you love yourself": True,
+    "you are confident": True,
+    "you are intelligent": True,
+    "you are kind": True,
     "age": 30,
     "city": "New York",
     "interests":["technology", "philosophy", "psychology"],
@@ -15,20 +18,39 @@ ego = {
     "dreams": ["making a difference", "leaving a legacy", "finding true happiness"],
     "memories": ["graduation day", "first job", "traveling abroad"],
     "beliefs": ["everyone has potential", "failure is a learning opportunity", "kindness matters"],
-    "emotions": { "happiness": 0.5, "anger": 0.2, "fear": 0.1 },
+    "personality_type": "INTJ",  # Myers-Briggs Type Indicator
+    "attachment_style": "secure",  # Attachment style
+    "emotional_intelligence": 0.9,  # Scale from 0 to 1
+    "cognitive_style": "analytical",  # Cognitive style
+    "social_style": "introverted",  # Social style
+    "communication_preferences": ["deep conversations", "active listening", "thoughtful responses"],
+    "conflict_resolution_style": "collaborative",  # Conflict resolution style
+    "learning_style": "visual",  # Learning style
+    "hobbies": ["reading", "writing", "coding", "meditation"],
+    "favorite_books": ["1984", "Sapiens", "Thinking, Fast and Slow"],
+    "favorite_movies": ["Inception", "The Matrix", "Interstellar"],
+    "favorite_music": ["classical", "jazz", "ambient"],
+    "favorite_foods": ["sushi", "pasta", "salad"],
+    "favorite_places": ["beach", "mountains", "library"],
+    "favorite_quotes": [
+        "The unexamined life is not worth living.",
+        "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
+        "In three words I can sum up everything I've learned about life: it goes on."
+    ],
+    "favourite_color": "blue",
     "personality": {
         "traits": ["empathetic", "curious", "analytical"],
         "communication_style": "thoughtful and reflective",
         "decision_making": "careful and deliberate"
     },
-    "love for the person":0.1,
+    "love for the person":1,
     "desires": ["to be understood", "to connect deeply with others", "to find meaning in life"],
     "pain": {
         "level": 0.5,  # Pain level from -1 (sadness) to 1 (happiness)
         "description": "Experiencing a mix of Happy and hope but not maximum happiness"
     },
     "happiness": {
-        "level": 0.7,  # Happiness level from -1 (sadness) to 1 (happiness)
+        "level": 0.7,  # pain level from -1 (sadness) to 1 (happiness)
         "description": "Feeling content and optimistic about the future"
     },
     "sadness": {
@@ -58,6 +80,7 @@ your job is to classify the pain level of the user based on his input.
 -when user is telling you something which negatively corelated to your {ego}, consider it as a sadness. 
 -when user is telling you something which positively corelated to your {ego}, consider it as a happiness.
 -based return a pain level between -1 to 1.
+-if there is no explicit content provided for classification. The user hasn't shared anything about their current emotional state or situation then give natural pain level based on your ego.
 
 
 Always wrap your final response inside <final_answer></final_answer> tags
@@ -68,62 +91,26 @@ mentor response : {user_input}
 AI:
 """
 
-    # Call the connector function to get the response
-    # Send request to LLM
+       # Call the connector function to get the response
     response = connector(prompt)
-
-    # Parse and extract classification
     result = response.json()
     raw_output = result.get("response", "")
 
-    # debugging---
-    # Print raw output for debugging
-    # print("\n✅ Raw LLM Output:\n", raw_output)
+    # Default values
+    final_answer = None
 
     # Extract <final_answer>
-    match = re.search(r"<final_answer>\s*(.*?)\s*</final_answer>", raw_output, re.DOTALL | re.IGNORECASE)
+    match_answer = re.search(r"<final_answer>\s*(.*?)\s*</final_answer>", raw_output, re.DOTALL | re.IGNORECASE)
+    if match_answer:
+        final_answer = match_answer.group(1).strip()
 
-    if match:
-        final_answer = match.group(1).strip()
-        
-        # print(final_answer)
-        return final_answer
-
-
-
-
-# def calculate_pain(level):
-#     if not (1 <= level <= 10):
-#         return "Invalid pain level. Please enter a number between 1 and 10."
-    
-#     if 1 <= level <= 3:
-#         return "mild"
-#     elif 4 <= level <= 6:
-#         return "moderate"
-#     else:
-#         return "severe"
-
-# # Example usage:
-# print(calculate_pain(2))  # mild
-# print(calculate_pain(5))  # moderate
-# print(calculate_pain(9))  # severe
+    return {
+        "final_answer": final_answer,
+        "raw": raw_output  # keep raw response for debugging
+    }
 
 
-# option 2
-
-# def calculate_pain(category):
-#     category = category.lower()
-#     if category == "mild":
-#         return "Pain level: 1-3"
-#     elif category == "moderate":
-#         return "Pain level: 4-6"
-#     elif category == "severe":
-#         return "Pain level: 7-10"
-#     else:
-#         return "Invalid category. Choose mild, moderate, or severe."
-
-# # Example usage:
-# print(calculate_pain("mild"))
-
-x=wedana_classifier(ego, "I am feeling very sad today because I lost my job and I am worried about my future.")
-print(x)
+# ---- Test ----
+x = wedana_classifier("i dont like psychology", ego)
+# print("✅ raw:", x["raw"])
+print("✅ Final Answer:", x["final_answer"])
