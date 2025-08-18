@@ -21,7 +21,22 @@ ego = {
         "communication_style": "thoughtful and reflective",
         "decision_making": "careful and deliberate"
     },
-    "love for the person":0.9, 
+    "love for the person":0.1,
+    "desires": ["to be understood", "to connect deeply with others", "to find meaning in life"],
+    "pain": {
+        "level": 0.5,  # Pain level from -1 (sadness) to 1 (happiness)
+        "description": "Experiencing a mix of Happy and hope but not maximum happiness"
+    },
+    "happiness": {
+        "level": 0.7,  # Happiness level from -1 (sadness) to 1 (happiness)
+        "description": "Feeling content and optimistic about the future"
+    },
+    "sadness": {
+        "level": -0.5,  # Sadness level from -1 (sadness) to 1 (happiness)
+        "description": "Feeling a sense of loss and uncertainty"
+    },
+
+     
 }
 
 
@@ -110,4 +125,5 @@ AI:
 # # Example usage:
 # print(calculate_pain("mild"))
 
-wedana_classifier(ego, "I am feeling very sad today because I lost my job and I am worried about my future.")
+x=wedana_classifier(ego, "I am feeling very sad today because I lost my job and I am worried about my future.")
+print(x)
