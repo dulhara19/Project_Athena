@@ -80,7 +80,7 @@ your job is to classify the pain level of the user based on his input.
 -when user is telling you something which negatively corelated to your {ego}, consider it as a sadness. 
 -when user is telling you something which positively corelated to your {ego}, consider it as a happiness.
 -based return a pain level between -1 to 1.
--if there is no explicit content provided for classification. The user hasn't shared anything about their current emotional state or situation then give natural pain level based on your ego.
+-if there is no explicit content provided for classification. The user hasn't shared anything about their current emotional state or situation then give natural pain level 0.
 
 
 Always wrap your final response inside <final_answer></final_answer> tags
@@ -110,7 +110,7 @@ AI:
     }
 
 
-# ---- Test ----
-x = wedana_classifier("i dont like psychology", ego)
-# print("✅ raw:", x["raw"])
-print("✅ Final Answer:", x["final_answer"])
+# # ---- Test ----
+# x = wedana_classifier("how are you", ego)
+# # print("✅ raw:", x["raw"])
+# print("✅ Final Answer:", x["final_answer"])

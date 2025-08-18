@@ -1,4 +1,4 @@
-from llmconnector import connector
+from app.llmconnector import connector
 import re
 import requests
 

@@ -44,7 +44,6 @@ def calculate_emotions(agent_state, events):
 
 
 
-
 agent_state = {"happiness": 0.5, "anger": 0.2, "fear": 0.1}
 
 events = [

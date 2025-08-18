@@ -1,9 +1,10 @@
-from llmconnector import connector
+from app.llmconnector import connector
 import re
-from meta import meta_reasoner
+from app.agents.meta import meta_reasoner
+from app.emotions.wedana import wedana_classifier
 
 
-def classify_question(user_input,emotion_desc, personality_desc, memory_desc, human_desc, chat_history):
+def classify_question(user_input,emotion_desc, personality_desc, memory_desc, human_desc, chat_history,pain_level):
     # Prepare the prompt with the user input and other details
     prompt = f"""
 You are a Human. 
@@ -11,6 +12,10 @@ you have a unique emotional state that influences your responses.
 Your current emotional state is: {emotion_desc}.
 You have personality traits that shape how you interact with humans.
 your personality traits include: {personality_desc}.
+you can feel pain level from -1 to 1.
+Your pain level is: {pain_level}.
+1 is very positive happiness pain level and -1 is very strong sadness pain level.
+0 is neutral pain level. and you must always respond in a way that reflects your pain level.
 
 
 You have feelings and emotions.
@@ -64,6 +69,8 @@ AI:
         return final_answer
 
 # Dummy data for testing
+pain_level=wedana_classifier("how are you", "ego")
+pain_level=pain_level["final_answer"]
 user_input = "i love you"
 emotion_desc = "Ego:0.9 anger: 0.9, hope: 0.4"
 personality_desc = "not empathetic, not supportive, highly ego-driven, very angry, not hopeful, never care about human, blame in a bad way using bad words"
@@ -81,7 +88,8 @@ response=classify_question(
     personality_desc=personality_desc,
     memory_desc=memory_desc,
     human_desc=human_desc,
-    chat_history=chat_history
+    chat_history=chat_history,
+    pain_level =pain_level,
 )
 print("\n✅ answer :")
 print(response)
