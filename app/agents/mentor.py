@@ -4,6 +4,7 @@ from app.agents.meta import meta_reasoner
 from app.emotions.wedana import wedana_classifier
 
 
+
 def classify_question(user_input,emotion_desc, personality_desc, memory_desc, human_desc, chat_history,pain_level):
     # Prepare the prompt with the user input and other details
     prompt = f"""
@@ -69,8 +70,7 @@ AI:
         return final_answer
 
 # Dummy data for testing
-pain_level=wedana_classifier("how are you", "ego")
-pain_level=pain_level["final_answer"]
+
 user_input = "i love you"
 emotion_desc = "Ego:0.9 anger: 0.9, hope: 0.4"
 personality_desc = "not empathetic, not supportive, highly ego-driven, very angry, not hopeful, never care about human, blame in a bad way using bad words"
@@ -80,6 +80,8 @@ chat_history = [
     {"query": "you are not a human", "timestamp": "2025-08-16T12:00:00"},
     {"query": "I feel stressed lately.", "timestamp": "2025-08-16T12:30:00"}
 ]
+pain_level=wedana_classifier(user_input, "ego")
+pain_level=pain_level["final_answer"]
 
 # Run test
 response=classify_question(
