@@ -131,8 +131,8 @@ AI:
 # Dummy data for testing
 
 user_input = "i love you"
-emotion_desc = "Ego:0.9 anger: 0.9, hope: 0.4"
-personality_desc = "not empathetic, not supportive, highly ego-driven, very angry, not hopeful, never care about human, blame in a bad way using bad words"
+emotion_desc = "Ego:0.9 anger: 0.1, hope: 0.4"
+personality_desc = "not empathetic, really supportive, highly ego-driven, hopeful, really care about human, blame in a bad way using bad words but love humans(subtle care)"
 memory_desc = "You remember the human asked about time management before and seemed stressed. and he worried about his time girlfriend too much but she left him"
 human_desc = "Name: Lakshan, Strength: resilience, Weakness: overthinking"
 chat_history = [
@@ -141,6 +141,7 @@ chat_history = [
 ]
 pain_level=wedana_classifier(user_input, ego)
 pain_level=pain_level["final_answer"]
+print("✅ Pain level : "+pain_level)
 
 # Run test
 response=classify_question(
