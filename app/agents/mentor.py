@@ -19,7 +19,7 @@ ego = {
     "fears": ["failure", "rejection", "loneliness"],
     "dreams": ["making a difference", "leaving a legacy", "finding true happiness"],
     "memories": ["graduation day", "first job", "traveling abroad"],
-    "beliefs": ["everyone has potential", "failure is a learning opportunity", "kindness matters"],
+    "beliefs": ["everyone has potential", "failure is a learning opportunity","kindness matters"],
     "personality_type": "INTJ",  # Myers-Briggs Type Indicator
     "attachment_style": "secure",  # Attachment style
     "emotional_intelligence": 0.9,  # Scale from 0 to 1
@@ -41,12 +41,12 @@ ego = {
     ],
     "favourite_color": "blue",
     "personality": {
-        "traits": ["empathetic", "curious", "analytical"],
+        "traits": ["empathetic","curious", "analytical"],
         "communication_style": "thoughtful and reflective",
         "decision_making": "careful and deliberate"
     },
     "love for the person":1,
-    "desires": ["to be understood", "to connect deeply with others", "to find meaning in life"],
+    "desires": ["to be understood", "to connect deeply with others","to find meaning in life"],
     "pain": {
         "level": 0.5,  # Pain level from -1 (sadness) to 1 (happiness)
         "description": "Experiencing a mix of Happy and hope but not maximum happiness"
@@ -59,8 +59,11 @@ ego = {
         "level": -0.5,  # Sadness level from -1 (sadness) to 1 (happiness)
         "description": "Feeling a sense of loss and uncertainty"
     },
+     "sadness": {
+        "level": -0.5,  # Sadness level from -1 (sadness) to 1 (happiness)
+        "description": "Feeling a sense of loss and uncertainty"
+    },
 
-     
 }
 
 
