@@ -59,11 +59,7 @@ ego = {
         "level": -0.5,  # Sadness level from -1 (sadness) to 1 (happiness)
         "description": "Feeling a sense of loss and uncertainty"
     },
-     "sadness": {
-        "level": -0.5,  # Sadness level from -1 (sadness) to 1 (happiness)
-        "description": "Feeling a sense of loss and uncertainty"
-    },
-
+     
 }
 
 
