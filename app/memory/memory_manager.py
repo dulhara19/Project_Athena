@@ -44,3 +44,20 @@ def update_agent_memory(memory, section, key=None, value=None, append=False):
             memory[section] = value
 
     return memory
+
+agent_memory = {
+    "user_profile": {"name": "Lakshan"},
+    "emotional_traits": {"strengths": [], "weaknesses": []},
+    "chat_history": []
+}
+
+# Update user age
+update_agent_memory(agent_memory, "user_profile", "age", 23)
+
+# Add a strength
+update_agent_memory(agent_memory, "emotional_traits", "strengths", "resilient", append=True)
+
+# Add chat history
+update_agent_memory(agent_memory, "chat_history", value="Asked about agent design", append=True)
+
+print(agent_memory)
