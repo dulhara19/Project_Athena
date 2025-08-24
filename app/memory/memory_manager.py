@@ -26,7 +26,14 @@ def update_agent_pain(pain_level: float):
     """Append pain level with timestamp to the history list"""
     timestamp = datetime.datetime.now()
     pain_history.append((timestamp, pain_level))
-    print(f"Recorded pain level {pain_level} at {timestamp}")
+    print(f"✅ Recorded pain level {pain_level} at {timestamp}")
+    return pain_history
+
+
+# Example usage
+
+
+
 
 #plotting the pain history
 import matplotlib.pyplot as plt
@@ -52,47 +59,50 @@ def plot_pain_history(pain_history):
     plt.show()
 
 
-def update_agent_memory(memory, section, key=None, value=None, append=False):
-    """
-    Dynamically update agent memory.
-    - section: which part ("user_profile", "emotional_traits", "chat_history")
-    - key: field to update inside section (optional)
-    - value: new value
-    - append: if True, appends instead of replacing
-    """
 
-    if section not in memory:
-        memory[section] = {} if key else []
+# plot_pain_history(pain_history)
 
-    if key:
-        if append and isinstance(memory[section].get(key), list):
-            memory[section][key].append(value)
-        else:
-            memory[section][key] = value
-    else:
-        # no key → directly append or set whole section
-        if append and isinstance(memory[section], list):
-            memory[section].append(value)
-        else:
-            memory[section] = value
+# def update_agent_memory(memory, section, key=None, value=None, append=False):
+#     """
+#     Dynamically update agent memory.
+#     - section: which part ("user_profile", "emotional_traits", "chat_history")
+#     - key: field to update inside section (optional)
+#     - value: new value
+#     - append: if True, appends instead of replacing
+#     """
 
-    return memory
+#     if section not in memory:
+#         memory[section] = {} if key else []
 
-agent_memory = {
-    "user_profile": {"name": "Lakshan"},
-    "emotional_traits": {"strengths": [], "weaknesses": []},
-    "chat_history": []
-}
+#     if key:
+#         if append and isinstance(memory[section].get(key), list):
+#             memory[section][key].append(value)
+#         else:
+#             memory[section][key] = value
+#     else:
+#         # no key → directly append or set whole section
+#         if append and isinstance(memory[section], list):
+#             memory[section].append(value)
+#         else:
+#             memory[section] = value
 
-# Update user age
-update_agent_memory(agent_memory, "user_profile", "age", 24)
+#     return memory
 
-# Add a strength
-update_agent_memory(agent_memory, "emotional_traits", "strengths", "resilient", append=True)
+# agent_memory = {
+#     "user_profile": {"name": "Lakshan"},
+#     "emotional_traits": {"strengths": [], "weaknesses": []},
+#     "chat_history": []
+# }
 
-# Add chat history
-update_agent_memory(agent_memory, "chat_history", value="Asked about agent design", append=True)
+# # Update user age
+# update_agent_memory(agent_memory, "user_profile", "age", 24)
 
-print(agent_memory)
+# # Add a strength
+# update_agent_memory(agent_memory, "emotional_traits", "strengths", "resilient", append=True)
+
+# # Add chat history
+# update_agent_memory(agent_memory, "chat_history", value="Asked about agent design", append=True)
+
+# print(agent_memory)
 
 
