@@ -22,11 +22,34 @@ import datetime
 # our data structure (global or inside your agent memory dict)
 pain_history = []
 
-def update_agent_pain(pain_level: int):
+def update_agent_pain(pain_level: float):
     """Append pain level with timestamp to the history list"""
     timestamp = datetime.datetime.now()
     pain_history.append((timestamp, pain_level))
     print(f"Recorded pain level {pain_level} at {timestamp}")
+
+#plotting the pain history
+import matplotlib.pyplot as plt
+
+def plot_pain_history(pain_history):
+    if not pain_history:
+        print("No data to plot yet.")
+        return
+    
+    # separate timestamps and pain levels
+    times = [t for t, _ in pain_history]
+    levels = [p for _, p in pain_history]
+
+    # plot
+    plt.figure(figsize=(8, 4))
+    plt.plot(times, levels, marker="o", linestyle="-", color="red")
+    plt.xlabel("Time")
+    plt.ylabel("Pain Level")
+    plt.title("Pain Evolution Over Time")
+    plt.xticks(rotation=45)  # tilt timestamps so they don’t overlap
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
 
 
 def update_agent_memory(memory, section, key=None, value=None, append=False):

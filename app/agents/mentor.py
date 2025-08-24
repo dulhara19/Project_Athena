@@ -2,6 +2,7 @@ from app.llmconnector import connector
 import re
 from app.agents.meta import meta_reasoner
 from app.emotions.wedana import wedana_classifier
+from app.memory.memory_manager import update_agent_pain
 
 ego = {
     "self esteem": 0.8,
@@ -143,6 +144,9 @@ pain_level=wedana_classifier(user_input, ego)
 pain_level=pain_level["final_answer"]
 print("✅ Pain level : "+pain_level)
 
+#updating the pain level is pain history
+update_agent_pain(pain_level)
+
 # Run test
 response=classify_question(
     user_input=user_input,
@@ -157,5 +161,5 @@ print("\n✅ answer :")
 print(response)
 
 meta_res=meta_reasoner(response, emotion_desc, personality_desc, memory_desc, human_desc, chat_history,user_input)
-print("\n✅ Meta Reasonng :")
+print("\n✅ Meta Reasonng :") 
 print(meta_res)
