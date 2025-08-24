@@ -1,21 +1,21 @@
-agent_memory = {
-    "user_profile": {
-        "name": "Lakshan",
-        "age": 23,
-        "goals": ["learn AI", "become millionaire"]
-    },
-    "emotional_traits": {
-        "strengths": ["hardworking", "curious"],
-        "weaknesses": ["impatient"],
-        "attitudes": ["positive"]
-    },
-    "chat_history": []
-}
+# agent_memory = {
+#     "user_profile": {
+#         "name": "Lakshan",
+#         "age": 23,
+#         "goals": ["learn AI", "become millionaire"]
+#     },
+#     "emotional_traits": {
+#         "strengths": ["hardworking", "curious"],
+#         "weaknesses": ["impatient"],
+#         "attitudes": ["positive"]
+#     },
+#     "chat_history": []
+# }
 
-# update profile dynamically
-agent_memory["user_profile"]["age"] = 24  
-agent_memory["emotional_traits"]["weaknesses"].append("self-doubt")
-agent_memory["chat_history"].append("User asked about LinkedIn post")
+# # update profile dynamically
+# agent_memory["user_profile"]["age"] = 24  
+# agent_memory["emotional_traits"]["weaknesses"].append("self-doubt")
+# agent_memory["chat_history"].append("User asked about LinkedIn post")
 
 
 
@@ -52,7 +52,7 @@ agent_memory = {
 }
 
 # Update user age
-update_agent_memory(agent_memory, "user_profile", "age", 23)
+update_agent_memory(agent_memory, "user_profile", "age", 24)
 
 # Add a strength
 update_agent_memory(agent_memory, "emotional_traits", "strengths", "resilient", append=True)
