@@ -17,6 +17,16 @@
 # agent_memory["emotional_traits"]["weaknesses"].append("self-doubt")
 # agent_memory["chat_history"].append("User asked about LinkedIn post")
 
+import datetime
+
+# our data structure (global or inside your agent memory dict)
+pain_history = []
+
+def update_agent_pain(pain_level: int):
+    """Append pain level with timestamp to the history list"""
+    timestamp = datetime.datetime.now()
+    pain_history.append((timestamp, pain_level))
+    print(f"Recorded pain level {pain_level} at {timestamp}")
 
 
 def update_agent_memory(memory, section, key=None, value=None, append=False):
@@ -61,3 +71,5 @@ update_agent_memory(agent_memory, "emotional_traits", "strengths", "resilient", 
 update_agent_memory(agent_memory, "chat_history", value="Asked about agent design", append=True)
 
 print(agent_memory)
+
+
