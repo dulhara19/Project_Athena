@@ -30,33 +30,39 @@ def update_agent_pain(pain_level: float):
     return pain_history
 
 
-# Example usage
 
-
-
-
-#plotting the pain history
+import json
 import matplotlib.pyplot as plt
 
-def plot_pain_history(pain_history):
-    if not pain_history:
-        print("No data to plot yet.")
-        return
-    
-    # separate timestamps and pain levels
-    times = [t for t, _ in pain_history]
-    levels = [p for _, p in pain_history]
 
-    # plot
-    plt.figure(figsize=(8, 4))
-    plt.plot(times, levels, marker="o", linestyle="-", color="red")
+LOG_FILE = "pain_log.json"
+
+def plot_pain_log():
+    # Load the JSON log
+    with open(LOG_FILE, "r") as f:
+        data = json.load(f)
+
+    # Extract timestamps and pain levels
+    timestamps = [datetime.fromisoformat(entry["timestamp"]) for entry in data]
+    pain_levels = [entry["pain_level"] for entry in data]
+
+    # Plot graph
+    plt.figure(figsize=(10, 5))
+    plt.plot(timestamps, pain_levels, marker="o", linestyle="-", linewidth=2)
+
+    # Labels and title
+    plt.title("Pain Level Over Time")
     plt.xlabel("Time")
-    plt.ylabel("Pain Level")
-    plt.title("Pain Evolution Over Time")
-    plt.xticks(rotation=45)  # tilt timestamps so they don’t overlap
+    plt.ylabel("Pain Level (0-1)")
+    plt.xticks(rotation=30)
     plt.grid(True)
     plt.tight_layout()
+
+    # Show graph
     plt.show()
+
+if __name__ == "__main__":
+    plot_pain_log()
 
 
 
@@ -105,14 +111,12 @@ def plot_pain_history(pain_history):
 
 # print(agent_memory)
 
-
-import datetime
 import json
 import os
 
 LOG_FILE = "pain_log.json"
 
-def update_agent_pain(pain_level: float):
+def update_agent_pain_log(pain_level: float):
     timestamp = datetime.datetime.now().isoformat()
 
     # Create a new entry
