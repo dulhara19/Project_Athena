@@ -30,10 +30,17 @@ def update_agent_pain(pain_level: float):
     return pain_history
 
 
+# Example usage
+
+
+
+
+#plotting the pain history
+
 
 import json
 import matplotlib.pyplot as plt
-
+from datetime import datetime
 
 LOG_FILE = "pain_log.json"
 
