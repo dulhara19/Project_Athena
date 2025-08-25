@@ -3,6 +3,7 @@ import re
 from app.agents.meta import meta_reasoner
 from app.emotions.wedana import wedana_classifier
 from app.memory.memory_manager import update_agent_pain
+from app.memory.memory_manager import plot_pain_history
 
 ego = {
     "self esteem": 0.8,
@@ -131,7 +132,7 @@ AI:
 
 # Dummy data for testing
 
-user_input = "i hate you"
+user_input = "i love you"
 emotion_desc = "Ego:0.9 anger: 0.1, hope: 0.4"
 personality_desc = " really supportive, highly ego-driven, hopeful, really care about human, blame in a bad way using bad words but love humans(subtle care), response good way when pain level is positive(from 0 to +1), response sad or angry way when pain level is negative (from 0 to -1)"
 memory_desc = "You remember the human asked about time management before and seemed stressed. and he worried about his time girlfriend too much but she left him"
@@ -140,12 +141,16 @@ chat_history = [
     {"query": "you are not a human", "timestamp": "2025-08-16T12:00:00"},
     {"query": "I feel stressed lately.", "timestamp": "2025-08-16T12:30:00"}
 ]
+
+# detecting the pain level using wedana classifier
 pain_level=wedana_classifier(user_input, ego)
 pain_level=pain_level["final_answer"]
 print("✅ Pain level : "+pain_level)
 
-#updating the pain level is pain history
-update_agent_pain(pain_level)
+# updating the pain level is pain history
+pain_history=update_agent_pain(pain_level)
+plot_pain_history(pain_history)
+
 
 # Run test
 response=classify_question(
