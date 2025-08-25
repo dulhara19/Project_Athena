@@ -106,3 +106,33 @@ def plot_pain_history(pain_history):
 # print(agent_memory)
 
 
+import datetime
+import json
+import os
+
+LOG_FILE = "pain_log.json"
+
+def update_agent_pain(pain_level: float):
+    timestamp = datetime.datetime.now().isoformat()
+
+    # Create a new entry
+    entry = {
+        "timestamp": timestamp,
+        "pain_level": pain_level
+    }
+
+    # Load existing log (if file exists), otherwise create new list
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, "r") as f:
+            data = json.load(f)
+    else:
+        data = []
+
+    # Append new record
+    data.append(entry)
+
+    # Write back to file
+    with open(LOG_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+
+    print(f"Logged pain level {pain_level} at {timestamp}")
