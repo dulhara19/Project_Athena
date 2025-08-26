@@ -4,7 +4,7 @@ from app.agents.meta import meta_reasoner
 from app.emotions.wedana import wedana_classifier
 from app.memory.memory_manager import update_agent_pain
 from app.memory.memory_manager import plot_pain_history
-from app.memory.memory_manager import update_agent_pain_log
+from app.memory.memory_manager import update_agent_pain_log,plot_pain_log
 
 
 ego = {
@@ -155,7 +155,7 @@ pain_history=update_agent_pain(pain_level)
 
 # update the pain level to the json log
 update_agent_pain_log(pain_level)
-
+plot_pain_log
 # 
 
 # Run test
