@@ -151,8 +151,12 @@ print("✅ Pain level : "+pain_level)
 
 # updating the pain level is pain history
 pain_history=update_agent_pain(pain_level)
-plot_pain_history(pain_history)
 
+
+# update the pain level to the json log
+update_agent_pain_log(pain_level)
+
+# 
 
 # Run test
 response=classify_question(
