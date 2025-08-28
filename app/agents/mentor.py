@@ -155,8 +155,9 @@ pain_history=update_agent_pain(pain_level)
 
 # update the pain level to the json log
 update_agent_pain_log(pain_level)
+# plotting the pain log 
 plot_pain_log
-# 
+
 
 # Run test
 response=classify_question(
