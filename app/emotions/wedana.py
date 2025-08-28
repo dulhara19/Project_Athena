@@ -50,7 +50,10 @@ AI:
         "raw": raw_output  # keep raw response for debugging
     }
 
-
+def pain_remember(pain_level):
+    if pain_level:
+        1 
+       
 # # ---- Test ----
 # x = wedana_classifier("how are you", ego)
 # # print("✅ raw:", x["raw"])
