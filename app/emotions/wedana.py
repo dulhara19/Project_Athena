@@ -50,6 +50,7 @@ AI:
         "raw": raw_output  # keep raw response for debugging
     }
 
+import os
 LOG_FILE = "memory_log.json"
 
 def update_memory(string):
