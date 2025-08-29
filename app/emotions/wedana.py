@@ -50,7 +50,8 @@ AI:
         "raw": raw_output  # keep raw response for debugging
     }
 
-import os
+# tying to implement a function to update the memory according to max sad,happy
+import os,json
 LOG_FILE = "memory_log.json"
 
 def update_memory(string):
