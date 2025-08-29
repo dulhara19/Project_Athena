@@ -49,7 +49,32 @@ AI:
         "final_answer": final_answer,
         "raw": raw_output  # keep raw response for debugging
     }
+
+LOG_FILE = "memory_log.json"
+
 def update_memory(string):
+    # Create a new entry
+    entry = {
+        "timestamp": timestamp,
+        "pain_level": pain_level
+    }
+
+    # Load existing log (if file exists), otherwise create new list
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, "r") as f:
+            data = json.load(f)
+    else:
+        data = []
+
+    # Append new record
+    data.append(entry)
+
+    # Write back to file
+    with open(LOG_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+
+    
+
 
 
 def pain_remember(pain_level):
