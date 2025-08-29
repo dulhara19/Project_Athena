@@ -52,7 +52,7 @@ AI:
 
 def pain_remember(pain_level):
     if pain_level:
-        (--> 1 pure happiness), (-1--> severe sad)
+        # (--> 1 pure happiness), (-1--> severe sad) 
        
 # # ---- Test ----
 # x = wedana_classifier("how are you", ego)
