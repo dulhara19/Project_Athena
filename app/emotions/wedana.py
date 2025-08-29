@@ -54,10 +54,10 @@ AI:
 import os,json
 LOG_FILE = "memory_log.json"
 
-def update_memory(string):
+def update_memory(user_query,pain_status):
     # Create a new entry
     entry = {
-        "timestamp": timestamp,
+        "timestamp": user_query,
         "pain_level": pain_level
     }
 
