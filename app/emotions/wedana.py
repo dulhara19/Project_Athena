@@ -49,12 +49,15 @@ AI:
         "final_answer": final_answer,
         "raw": raw_output  # keep raw response for debugging
     }
+def update_memory(string):
+
 
 def pain_remember(pain_level):
     if pain_level == 1:
         pain_status="maximum happiness"
     elif pain_level == -1:
-        pain_status ="maximum sadness"    
+        pain_status ="maximum sadness"
+    update_memory        
 
         # (--> 1 pure happiness), (-1--> severe sad) 
        
