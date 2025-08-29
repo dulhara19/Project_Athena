@@ -57,8 +57,8 @@ LOG_FILE = "memory_log.json"
 def update_memory(user_query,pain_status):
     # Create a new entry
     entry = {
-        "timestamp": user_query,
-        "pain_level": pain_level
+        "user_query": user_query,
+        "pain_status": pain_status
     }
 
     # Load existing log (if file exists), otherwise create new list
