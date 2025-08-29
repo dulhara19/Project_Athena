@@ -51,7 +51,11 @@ AI:
     }
 
 def pain_remember(pain_level):
-    if pain_level:
+    if pain_level == 1:
+        pain_status="maximum happiness"
+    elif pain_level == -1:
+        pain_status ="maximum sadness"    
+
         # (--> 1 pure happiness), (-1--> severe sad) 
        
 # # ---- Test ----
