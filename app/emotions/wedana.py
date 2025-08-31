@@ -84,7 +84,7 @@ def pain_remember(pain_level):
         pain_status="neutral"
     else:
         pain_status="moderate"    
-    update_memory        
+  
 
         # (--> 1 pure happiness), (-1--> severe sad) 
        
