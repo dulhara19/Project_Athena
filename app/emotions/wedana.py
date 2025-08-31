@@ -75,15 +75,15 @@ def update_memory(user_query,pain_status):
     with open(LOG_FILE, "w") as f:
         json.dump(data, f, indent=4)
 
-    
-
-
-
 def pain_remember(pain_level):
     if pain_level == 1:
         pain_status="maximum happiness"
     elif pain_level == -1:
         pain_status ="maximum sadness"
+    elif pain_level== 0:
+        pain_status="neutral"
+    else:
+        pain_status="moderate"    
     update_memory        
 
         # (--> 1 pure happiness), (-1--> severe sad) 
