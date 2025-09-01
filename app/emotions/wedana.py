@@ -83,10 +83,7 @@ def pain_remember(pain_level):
     elif pain_level== 0:
         pain_status="neutral"
     else:
-        pain_status="moderate"    
-  
-
-        # (--> 1 pure happiness), (-1--> severe sad) 
+        pain_status="moderate"  
         
        
 # # ---- Test ----
