@@ -52,9 +52,9 @@ AI:
 
 # tying to implement a function to update the memory according to max sad,happy
 import os,json
-LOG_FILE = "memory_log.json"
+LOG_FILE = "pain_log.json"
 
-def update_memory(user_query,pain_status):
+def update_pain_history(user_query,pain_status):
     # Create a new entry
     entry = {
         "user_query": user_query,
