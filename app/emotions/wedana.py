@@ -75,6 +75,45 @@ def update_pain_history(user_query,pain_status):
     with open(LOG_FILE, "w") as f:
         json.dump(data, f, indent=4)
 
+
+# plotting the pain history
+import json
+import matplotlib.pyplot as plt
+
+LOG_FILE = "pain_log.json"
+
+def plot_pain_history():
+    # Load log file
+    try:
+        with open(LOG_FILE, "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print("No pain log file found.")
+        return
+    except json.JSONDecodeError:
+        print("Pain log file is empty or corrupted.")
+        return
+
+    if not data:
+        print("No data to plot.")
+        return
+
+    # Extract user queries (as x-axis labels) and pain levels
+    queries = [entry["user_query"] for entry in data]
+    pain_levels = [entry["pain_status"] for entry in data]
+
+    # Plot
+    plt.figure(figsize=(10, 5))
+    plt.plot(pain_levels, marker="o", linestyle="-", color="red", label="Pain Level")
+    plt.xticks(range(len(queries)), queries, rotation=45, ha="right")
+    plt.xlabel("User Queries")
+    plt.ylabel("Pain Level")
+    plt.title("Pain Level Evolution Over Time")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
 def pain_remember(pain_level):
     if pain_level == 1:
         pain_status="maximum happiness"
