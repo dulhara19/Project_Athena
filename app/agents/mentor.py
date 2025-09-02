@@ -2,6 +2,7 @@ from app.llmconnector import connector
 import re
 from app.agents.meta import meta_reasoner
 from app.emotions.wedana import wedana_classifier
+from app.emotions.wedana import update_pain_history,plot_pain_history
 from app.memory.memory_manager import update_agent_pain
 from app.memory.memory_manager import plot_pain_history
 from app.memory.memory_manager import update_agent_pain_log,plot_pain_log
@@ -150,14 +151,8 @@ pain_level=pain_level["final_answer"]
 print("✅ Pain level : "+pain_level)
 
 # updating the pain level is pain history
-pain_history=update_agent_pain(pain_level)
-
-
-# update the pain level to the json log
-update_agent_pain_log(pain_level)
-# plotting the pain log 
-plot_pain_log
-
+update_pain_history(pain_level)
+plot_pain_history()
 
 # Run test
 response=classify_question(
@@ -172,6 +167,6 @@ response=classify_question(
 print("\n✅ answer :")
 print(response)
 
-meta_res=meta_reasoner(response, emotion_desc, personality_desc, memory_desc, human_desc, chat_history,user_input)
-print("\n✅ Meta Reasonng :") 
-print(meta_res)
+# meta_res=meta_reasoner(response, emotion_desc, personality_desc, memory_desc, human_desc, chat_history,user_input)
+# print("\n✅ Meta Reasonng :") 
+# print(meta_res)
