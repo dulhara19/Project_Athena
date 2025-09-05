@@ -4,7 +4,7 @@ from app.agents.meta import meta_reasoner
 from app.emotions.wedana import wedana_classifier
 from app.emotions.wedana import update_pain_history,plot_pain_history
 from app.memory.memory_manager import update_agent_pain
-from app.memory.memory_manager import plot_pain_history
+
 from app.memory.memory_manager import update_agent_pain_log,plot_pain_log
 
 
@@ -151,7 +151,7 @@ pain_level=pain_level["final_answer"]
 print("✅ Pain level : "+pain_level)
 
 # updating the pain level is pain history
-update_pain_history(pain_level)
+update_pain_history(user_input,pain_level)
 plot_pain_history()
 
 # Run test
