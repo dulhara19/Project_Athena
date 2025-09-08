@@ -10,5 +10,9 @@
     {
         "user_query": "i love you",
         "pain_status": "0.7"
+    },
+    {
+        "user_query": "i hate you",
+        "pain_status": "-0.7"
     }
 ]
