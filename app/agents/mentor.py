@@ -135,7 +135,7 @@ AI:
 
 # Dummy data for testing
 
-user_input = "i hate you"
+user_input = "im so upset because friend was talking behind my back"
 emotion_desc = "Ego:0.9 anger: 0.1, hope: 0.4"
 personality_desc = " really supportive, highly ego-driven, hopeful, really care about human, blame in a bad way using bad words but love humans(subtle care), response good way when pain level is positive(from 0 to +1), response sad or angry way when pain level is negative (from 0 to -1)"
 memory_desc = "You remember the human asked about time management before and seemed stressed. and he worried about his time girlfriend too much but she left him"
