@@ -110,6 +110,7 @@ def plot_pain_history():
     plt.ylabel("Pain Level")
     plt.title("Pain Level Evolution Over Time")
     plt.legend()
+    plt.ylim(-1, 1)   # <-- Fix Y-axis scale between -1 and +1
     plt.tight_layout()
     plt.show()
 
