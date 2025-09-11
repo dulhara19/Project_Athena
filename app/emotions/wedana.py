@@ -103,16 +103,21 @@ def plot_pain_history():
     pain_levels = [entry["pain_status"] for entry in data]
 
     # Plot
-    plt.figure(figsize=(10, 5))
-    plt.plot(pain_levels, marker="o", linestyle="-", color="red", label="Pain Level")
-    plt.xticks(range(len(queries)), queries, rotation=45, ha="right")
-    plt.xlabel("User Queries")
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(len(pain_levels)), pain_levels, marker="o", linestyle="-", color="red", label="Pain Level")
+
+    # Use indexes for ticks, but label them with shortened queries
+    short_queries = [q[:20] + "..." if len(q) > 20 else q for q in queries]
+    plt.xticks(range(len(queries)), short_queries, rotation=45, ha="right")
+
+    plt.xlabel("User Queries (shortened)")
     plt.ylabel("Pain Level")
     plt.title("Pain Level Evolution Over Time")
     plt.legend()
-    plt.ylim(-1, 1)   # <-- Fix Y-axis scale between -1 and +1
+    plt.ylim(-1, 1)   # keep scale fixed
     plt.tight_layout()
     plt.show()
+
 
 
 def pain_remember(pain_level):
