@@ -98,7 +98,7 @@ def plot_pain_history():
         print("No data to plot.")
         return
 
-    # Extract user queries (as x-axis labels) and pain levels
+    # Extract user queries and pain levels
     queries = [entry["user_query"] for entry in data]
     pain_levels = [entry["pain_status"] for entry in data]
 
@@ -111,12 +111,16 @@ def plot_pain_history():
     plt.xticks(range(len(queries)), short_queries, rotation=45, ha="right")
 
     plt.xlabel("User Queries (shortened)")
-    plt.ylabel("Pain Level")
+    plt.ylabel("Pain Level (-1 to 1)")
     plt.title("Pain Level Evolution Over Time")
     plt.legend()
-    plt.ylim(-1, 1)   # keep scale fixed
+
+    # 🔑 Force fixed Y axis from -1 to +1
+    plt.ylim(-1, 1)
+
     plt.tight_layout()
     plt.show()
+
 
 
 
