@@ -1,5 +1,9 @@
 from app.llmconnector import connector
 import re
+import json
+import matplotlib.pyplot as plt
+import numpy as np
+from datetime import datetime
 
 
 
@@ -82,13 +86,15 @@ import matplotlib.pyplot as plt
 
 LOG_FILE = "pain_log.json"
 
-def plot_pain_history():
-    # Load log file
+#-------------------------------------------------------------
+
+def plot_pain_history_fixed(log_file=LOG_FILE, save_png=False, png_path="pain_plot.png"):
+    # --- Load file safely ---
     try:
-        with open(LOG_FILE, "r") as f:
+        with open(log_file, "r", encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError:
-        print("No pain log file found.")
+        print("No pain log file found:", log_file)
         return
     except json.JSONDecodeError:
         print("Pain log file is empty or corrupted.")
@@ -98,30 +104,72 @@ def plot_pain_history():
         print("No data to plot.")
         return
 
-    # Extract user queries and pain levels
-    queries = [entry["user_query"] for entry in data]
-    pain_levels = [entry["pain_status"] for entry in data]
+    # --- Extract x labels and pain values, robust conversion ---
+    raw_queries = []
+    raw_pains = []
+    for i, entry in enumerate(data):
+        # tolerate different key names if needed
+        q = entry.get("user_query") or entry.get("query") or f"entry_{i}"
+        p = entry.get("pain_status")
+        raw_queries.append(q)
 
-    # Plot
-    plt.figure(figsize=(12, 6))
-    plt.plot(range(len(pain_levels)), pain_levels, marker="o", linestyle="-", color="red", label="Pain Level")
+        # convert p to float robustly
+        try:
+            # handle strings like "0.6\n" or "60%" or numbers
+            if isinstance(p, str):
+                p_str = p.strip()
+                if p_str.endswith("%"):
+                    p = float(p_str.rstrip("%")) / 100.0
+                else:
+                    p = float(p_str)
+            else:
+                p = float(p)
+        except Exception as e:
+            print(f"Warning: could not parse pain_status for entry {i} ('{p}'): {e}. Using 0.0")
+            p = 0.0
 
-    # Use indexes for ticks, but label them with shortened queries
-    short_queries = [q[:20] + "..." if len(q) > 20 else q for q in queries]
-    plt.xticks(range(len(queries)), short_queries, rotation=45, ha="right")
+        # clamp to [-1, 1]
+        p = max(-1.0, min(1.0, p))
+        raw_pains.append(p)
 
-    plt.xlabel("User Queries (shortened)")
-    plt.ylabel("Pain Level (-1 to 1)")
-    plt.title("Pain Level Evolution Over Time")
-    plt.legend()
+    # --- Prepare x-axis (use indices; optional: parse timestamps for time-series) ---
+    x = list(range(len(raw_pains)))
+    short_labels = [ (s[:25] + '...') if isinstance(s, str) and len(s) > 25 else s for s in raw_queries ]
 
-    # 🔑 Force fixed Y axis from -1 to +1
-    plt.ylim(-1, 1)
+    # --- Plot with object API ---
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(x, raw_pains, marker="o", linestyle="-", linewidth=2, label="Pain Level")
+
+    # Force fixed Y limits and disable autoscale for Y
+    ax.set_ylim(-1.0, 1.0)
+    ax.set_autoscaley_on(False)   # ensure autoscale won't override the limits
+
+    # Set nice Y ticks
+    ax.set_yticks(np.linspace(-1.0, 1.0, 9))
+
+    # X ticks: show every label but shortened
+    ax.set_xticks(x)
+    ax.set_xticklabels(short_labels, rotation=45, ha="right")
+
+    # Zero baseline and grid
+    ax.axhline(0, color="gray", linestyle="--", linewidth=1)
+    ax.grid(True, axis="y", linestyle="--", alpha=0.4)
+
+    ax.set_xlabel("User Query (shortened)")
+    ax.set_ylabel("Pain Level (clipped to [-1,1])")
+    ax.set_title("Pain Level Evolution (fixed Y-axis -1 to 1)")
+    ax.legend()
 
     plt.tight_layout()
+
+    # Save optionally
+    if save_png:
+        plt.savefig(png_path, dpi=150)
+        print("Saved plot to", png_path)
+
     plt.show()
-
-
+    plt.close(fig)  # free memory
+# /////////////////////////////////////////////////////////////
 
 
 def pain_remember(pain_level):
