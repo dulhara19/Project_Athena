@@ -2,7 +2,7 @@ from app.llmconnector import connector
 import re
 from app.agents.meta import meta_reasoner
 from app.emotions.wedana import wedana_classifier
-from app.emotions.wedana import update_pain_history,plot_pain_history
+from app.emotions.wedana import update_pain_history,plot_pain_history_fixed
 from app.memory.memory_manager import update_agent_pain
 
 from app.memory.memory_manager import update_agent_pain_log,plot_pain_log
@@ -152,7 +152,7 @@ print("✅ Pain level : "+pain_level)
 
 # updating the pain level is pain history
 update_pain_history(user_input,pain_level)
-plot_pain_history()
+plot_pain_history_fixed()
 
 # Run test
 response=classify_question(
