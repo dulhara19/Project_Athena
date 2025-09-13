@@ -169,7 +169,8 @@ def plot_pain_history_fixed(log_file=LOG_FILE, save_png=False, png_path="pain_pl
 
     plt.show()
     plt.close(fig)  # free memory
-# /////////////////////////////////////////////////////////////
+
+#-------------------------------------------- 
 
 
 def pain_remember(pain_level):
