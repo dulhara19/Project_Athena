@@ -46,5 +46,9 @@
     {
         "user_query": "how ae you today? I feel a bit down but hopeful about the future.",
         "pain_status": "-0.4"
+    },
+    {
+        "user_query": "i love dogs and cats what about you?",
+        "pain_status": "0"
     }
 ]
