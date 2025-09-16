@@ -58,5 +58,9 @@
     {
         "user_query": "i love dogs and cats what about you?",
         "pain_status": "-0.5"
+    },
+    {
+        "user_query": "i love dogs and cats what about you?",
+        "pain_status": "0.4"
     }
 ]
