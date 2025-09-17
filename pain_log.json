@@ -70,5 +70,9 @@
     {
         "user_query": "hmm",
         "pain_status": "0"
+    },
+    {
+        "user_query": "hmm i miss her!",
+        "pain_status": "-0.6"
     }
 ]
