@@ -68,8 +68,6 @@ ego = {
         "level": 0,  # Sadness level from -1 (sadness) to 1 (happiness)
         "description": "feeling nothing"
     },
-
-     
 }
 
 
