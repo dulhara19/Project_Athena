@@ -74,5 +74,13 @@
     {
         "user_query": "hmm i miss her!",
         "pain_status": "-0.6"
+    },
+    {
+        "user_query": "i dont like classical music.. it makes me feel old what about you?",
+        "pain_status": "-1"
+    },
+    {
+        "user_query": "i dont like classical music.. it makes me feel old what about you?",
+        "pain_status": "-0.3"
     }
 ]
