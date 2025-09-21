@@ -9,7 +9,7 @@ from app.memory.memory_manager import update_agent_pain_log,plot_pain_log
 
 
 ego = {
-    "self esteem": 0.8,
+    "self esteem": 1.0,
     "you love yourself": True,
     "you are confident": True,
     "you are intelligent": True,
