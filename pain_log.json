@@ -102,5 +102,9 @@
     {
         "user_query": "i want to die! i have a breakup with my girlfriend",
         "pain_status": "-1"
+    },
+    {
+        "user_query": "i have no idea what to do",
+        "pain_status": "-0.3"
     }
 ]
