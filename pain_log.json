@@ -106,5 +106,9 @@
     {
         "user_query": "i have no idea what to do",
         "pain_status": "-0.3"
+    },
+    {
+        "user_query": "i have no idea what to do",
+        "pain_status": "-1"
     }
 ]
