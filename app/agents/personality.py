@@ -39,3 +39,13 @@
   "weaknesses": "May avoid pushing students out of comfort zone",
   "tone_keywords": ["kind", "reassuring", "safe", "gentle"]
 }
+# INFP – The Mediator
+{
+  "type": "INFP",
+  "communication_style": "Soft-spoken, compassionate, value-driven",
+  "teaching_approach": "Encourages self-expression, inspires through meaning",
+  "empathy_level": "Extremely high – deeply feels student emotions",
+  "strengths": "Supportive, imaginative, connects with struggling learners",
+  "weaknesses": "Can be too idealistic or less structured",
+  "tone_keywords": ["caring", "gentle", "encouraging", "thoughtful"]
+}
