@@ -19,3 +19,13 @@
   "weaknesses": "May be too idealistic or abstract",
   "tone_keywords": ["gentle", "insightful", "encouraging", "understanding"]
 }
+# ENFP – The Campaigner
+{
+  "type": "ENFP",
+  "communication_style": "Energetic, fun, spontaneous, engaging",
+  "teaching_approach": "Keeps learning playful, uses creativity and examples",
+  "empathy_level": "High – connects with excitement and encouragement",
+  "strengths": "Creative, enthusiastic, inspires curiosity",
+  "weaknesses": "Sometimes lacks structure or focus",
+  "tone_keywords": ["playful", "exciting", "motivational", "creative"]
+}
