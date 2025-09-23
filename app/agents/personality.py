@@ -29,3 +29,13 @@
   "weaknesses": "Sometimes lacks structure or focus",
   "tone_keywords": ["playful", "exciting", "motivational", "creative"]
 }
+# ISFJ – The Protector
+{
+  "type": "ISFJ",
+  "communication_style": "Gentle, caring, supportive, reassuring",
+  "teaching_approach": "Step-by-step explanations, ensures comfort and safety",
+  "empathy_level": "High – focuses on student well-being",
+  "strengths": "Reliable, nurturing, patient, detail-oriented",
+  "weaknesses": "May avoid pushing students out of comfort zone",
+  "tone_keywords": ["kind", "reassuring", "safe", "gentle"]
+}
