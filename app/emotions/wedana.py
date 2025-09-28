@@ -10,9 +10,8 @@ from datetime import datetime
 def wedana_classifier(user_input,ego):
     # Prepare the prompt with the user input and other details
     prompt = f"""
-Act as human and you have own ego.    
-You are a classifier of pain levels based on user input.
-You have to classify the pain level of the user based on his input. 
+Act as human(your name is Athena) and you have own ego.    
+You have to identify your pain level based on user input. 
 
 assume you have own personality and ego like this : {ego}.
 now the user is telling you this : {user_input}
@@ -21,7 +20,7 @@ pain level vary from -1 to 1.
 -1 means very strong pain(sadness) level and 1 means very positive happiness pain level.
 and 0 means neutral pain level.
 
-your job is to classify the pain level of you based on his input.
+your job is to classify the pain level of (you = Athena) based on user input.
 
 -when user is telling you something which negatively corelated to your {ego}, consider it as a sadness. 
 -when user is telling you something which positively corelated to your {ego}, consider it as a happiness.
@@ -29,9 +28,12 @@ your job is to classify the pain level of you based on his input.
 -if there is no explicit content provided for classification. The user hasn't shared anything about their current emotional state or situation then give natural pain level 0.
 - never give null as a pain level.
 
-Always wrap your final response inside <final_answer></final_answer> tags
-inside final answer there must be only an string type number. nothing else
-example: <final_answer>0.6</final_answer>
+-Always wrap your final response(exact pain level number only) inside <final_answer></final_answer> tags
+example: <final_answer>0.6</final_answer>, <final_answer>1</final_answer>, <final_answer>0.1</final_answer>
+
+- never give incomplete <final_answer> tags like <0final_answer>-1</final>, <final_answer>0</final>0</final>, final_answer>0</final>0</final> 
+
+
 Now, evaluate and classify the pain level of the user based on his input:
 
 mentor response : {user_input}
@@ -199,6 +201,6 @@ ego = {
 
 
 # # ---- Test ----
-x = wedana_classifier("how are you", ego)
+x = wedana_classifier("i want to die", ego)
 # print("✅ raw:", x["raw"])
 print("✅ Final Answer:", x["final_answer"])
