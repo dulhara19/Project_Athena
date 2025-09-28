@@ -10,26 +10,28 @@ from datetime import datetime
 def wedana_classifier(user_input,ego):
     # Prepare the prompt with the user input and other details
     prompt = f"""
+Act as human and you have own ego.    
 You are a classifier of pain levels based on user input.
 You have to classify the pain level of the user based on his input. 
 
-you have ego about you. here is your ego: {ego}.
+assume you have own personality and ego like this : {ego}.
 now the user is telling you this : {user_input}
-You have to classify your pain level of the user based on his input.
+You have to classify yourpain level(not the users pain level)based on his input.
 pain level vary from -1 to 1.
 -1 means very strong pain(sadness) level and 1 means very positive happiness pain level.
 and 0 means neutral pain level.
 
-your job is to classify the pain level of the user based on his input.
+your job is to classify the pain level of you based on his input.
 
 -when user is telling you something which negatively corelated to your {ego}, consider it as a sadness. 
 -when user is telling you something which positively corelated to your {ego}, consider it as a happiness.
 -based return a pain level between -1 to 1.
 -if there is no explicit content provided for classification. The user hasn't shared anything about their current emotional state or situation then give natural pain level 0.
-
+- never give null as a pain level.
 
 Always wrap your final response inside <final_answer></final_answer> tags
-
+inside final answer there must be only an string type number. nothing else
+example: <final_answer>0.6</final_answer>
 Now, evaluate and classify the pain level of the user based on his input:
 
 mentor response : {user_input}
@@ -39,8 +41,9 @@ AI:
        # Call the connector function to get the response
     response = connector(prompt)
     result = response.json()
+   
     raw_output = result.get("response", "")
-
+    print("raw output:", raw_output)
     # Default values
     final_answer = None
 
@@ -184,7 +187,18 @@ def pain_remember(pain_level):
         pain_status="moderate"  
         
        
+
+
+ego = {
+    "self esteem": 1.0,
+    "you love yourself": True,
+    "you are confident": True,
+    "city": "New York",
+    "values": ["integrity", "empathy", "growth"]
+}
+
+
 # # ---- Test ----
-# x = wedana_classifier("how are you", ego)
-# # print("✅ raw:", x["raw"])
-# print("✅ Final Answer:", x["final_answer"])
+x = wedana_classifier("how are you", ego)
+# print("✅ raw:", x["raw"])
+print("✅ Final Answer:", x["final_answer"])

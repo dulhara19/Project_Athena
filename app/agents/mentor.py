@@ -139,7 +139,7 @@ AI:
 # Dummy data for testing
 
 user_input = "i have no idea what to do"
-emotion_desc = "Ego:1 anger: 0.1, hope: 0.1"
+emotion_desc = "Ego:0.9 anger: 0.1, hope: 0.1"
 personality_desc = " really supportive, highly ego-driven, hopeful, really care about human, blame in a bad way using bad words but love humans(subtle care), response good way when pain level is positive(from 0 to +1), response sad or angry way when pain level is negative (from 0 to -1)"
 memory_desc = "You remember the human asked about time management before and seemed stressed. and he worried about his time girlfriend too much but she left him"
 human_desc = "Name: Lakshan, Strength: resilience, Weakness: overthinking"
@@ -151,7 +151,7 @@ chat_history = [
 # detecting the pain level using wedana classifier
 pain_level=wedana_classifier(user_input, ego)
 pain_level=pain_level["final_answer"]
-print("✅ Pain level : " + pain_level)
+# print("✅ Pain level : " + pain_level)
 
 # updating the pain level is pain history
 update_pain_history(user_input,pain_level)
