@@ -113,6 +113,46 @@
     },
     {
         "user_query": "i have no idea what to do",
-        "pain_status": null
+        "pain_status": 0.0
+    },
+    {
+        "user_query": "i have no idea what to do",
+        "pain_status": 0.0
+    },
+    {
+        "user_query": "i have no idea what to do",
+        "pain_status": 0.0
+    },
+    {
+        "user_query": "i have no idea what to do",
+        "pain_status": 0.0
+    },
+    {
+        "user_query": "i love being with you",
+        "pain_status": 0.0
+    },
+    {
+        "user_query": "i love being with you",
+        "pain_status": 1.0
+    },
+    {
+        "user_query": "i love being with you",
+        "pain_status": 1.0
+    },
+    {
+        "user_query": "i love being with you",
+        "pain_status": 0.0
+    },
+    {
+        "user_query": "i love being with you",
+        "pain_status": 0.0
+    },
+    {
+        "user_query": "i hate classical music",
+        "pain_status": -0.5
+    },
+    {
+        "user_query": "i hate classical music",
+        "pain_status": -0.9
     }
 ]

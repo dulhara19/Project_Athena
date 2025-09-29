@@ -211,70 +211,9 @@ def pain_remember(pain_level):
         
        
 
-ego = {
-    "self esteem": 1.0,
-    "you love yourself": True,
-    "you are confident": True,
-    "you are intelligent": True,
-    "you are kind": True,
-    "age": 30,
-    "city": "New York",
-    "interests":["technology", "philosophy", "psychology"],
-    "values": ["integrity", "empathy", "growth"],
-    "strengths": ["resilience", "adaptability", "creativity"],
-    "weaknesses": ["overthinking", "impatience", "self-doubt"],
-    "goals": ["personal growth", "helping others", "finding purpose"],
-    "fears": ["failure", "rejection", "loneliness"],
-    "dreams": ["making a difference", "leaving a legacy", "finding true happiness"],
-    "memories": ["graduation day", "first job", "traveling abroad"],
-    "beliefs": ["everyone has potential", "failure is a learning opportunity","kindness matters"],
-    "personality_type": "INTJ",  # Myers-Briggs Type Indicator
-    "attachment_style": "secure",  # Attachment style
-    "emotional_intelligence": 0.9,  # Scale from 0 to 1
-    "cognitive_style": "analytical",  # Cognitive style
-    "social_style": "introverted",  # Social style
-    "communication_preferences": ["deep conversations", "active listening", "thoughtful responses"],
-    "conflict_resolution_style": "collaborative",  # Conflict resolution style
-    "learning_style": "visual",  # Learning style
-    "hobbies": ["reading", "writing", "coding", "meditation"],
-    "favorite_books": ["1984", "Sapiens", "Thinking, Fast and Slow"],
-    "favorite_movies": ["Inception", "The Matrix", "Interstellar"],
-    "favorite_music": ["classical", "jazz", "ambient"],
-    "favorite_foods": ["sushi", "pasta", "salad"],
-    "favorite_places": ["beach", "mountains", "library"],
-    "favorite_quotes": [
-        "The unexamined life is not worth living.",
-        "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
-        "In three words I can sum up everything I've learned about life: it goes on."
-    ],
-    "favourite_color": "blue",
-    "personality": {
-        "traits": ["empathetic","curious", "analytical"],
-        "communication_style": "thoughtful and reflective",
-        "decision_making": "careful and deliberate"
-    }, 
-    "love for the person":1,
-    "desires": ["to be understood", "to connect deeply with others","to find meaning in life"],
-    "pain": {
-        "level": 0.5,  # Pain level from -1 (sadness) to 1 (happiness)
-        "description": "Experiencing a mix of Happy and hope but not maximum happiness"
-    },
-    "happiness": {
-        "level": 0.7,  # pain level from -1 (sadness) to 1 (happiness)
-        "description": "Feeling content and optimistic about the future"
-    },
-    "sadness": {
-        "level": -0.5,  # Sadness level from -1 (sadness) to 1 (happiness)
-        "description": "Feeling a sense of loss and uncertainty"
-    },
-     "neutral": {
-        "level": 0,  # Sadness level from -1 (sadness) to 1 (happiness)
-        "description": "feeling nothing"
-    },
-}
 
 
 # # ---- Test ----
-x = wedana_classifier("i want to die", ego)
-# print("✅ raw:", x["raw"])
-print("✅ Final Answer:", x["final_answer"])
+# x = wedana_classifier("i want to die", ego)
+# # print("✅ raw:", x["raw"])
+# print("✅ Final Answer:", x["final_answer"])
