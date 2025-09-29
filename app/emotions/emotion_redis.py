@@ -168,9 +168,9 @@ def analyze_user(user_id: str, text: str):
 if __name__ == "__main__":
     user_id = "user123"
     texts = [
-        "I feel so sad and lonely today...",
-        "I want to achieve my goals and plan everything",
-        "I love helping others, it makes me happy"
+        "I want to die",
+        "I love you so much!",
+    
     ]
     for t in texts:
         result = analyze_user(user_id, t)
