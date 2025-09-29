@@ -165,13 +165,80 @@ def analyze_user(user_id: str, text: str):
 # -----------------------------
 # 9️⃣ Test run
 # -----------------------------
-if __name__ == "__main__":
-    user_id = "user123"
-    texts = [
-        "I want to die",
-        "I love you so much!",
+# if __name__ == "__main__":
+#     user_id = "user123"
+#     texts = "I want to die"
     
-    ]
-    for t in texts:
-        result = analyze_user(user_id, t)
-        print(json.dumps(result, indent=4))
+    
+#     result = analyze_user(user_id, texts)
+
+# # Only print current emotion state
+# # print(json.dumps(result["emotions"], indent=4))
+
+# # Or if you want both text + current emotions
+# print(json.dumps({
+#     "text": result["text"],
+#     "emotions": result["emotions"]
+# }, indent=4))
+
+
+# =====================================
+
+import matplotlib.pyplot as plt
+
+# Function 1: Clear user memory
+def clear_memory(user_result):
+    """
+    Clears the recent memory of the user.
+    
+    Parameters:
+        user_result (dict): The result dictionary returned from analyze_user.
+    
+    Returns:
+        dict: The updated result dictionary with recent_memory cleared.
+    """
+    user_result["recent_memory"] = []
+    return user_result
+
+
+# Function 2: Plot emotions and pain level
+def plot_emotions_pain(emotions, pain_level, title="User Emotional State"):
+    """
+    Plots the emotions and pain level of the user.
+    
+    Parameters:
+        emotions (dict): The 'emotions' dictionary from user result.
+        pain_level (float): The 'pain_level' from user result.
+        title (str): Optional title for the plot.
+    """
+    # Get top emotions (you can choose all or top N)
+    emotion_scores = emotions["emotions"]
+    
+    # Sort emotions by score descending
+    sorted_emotions = dict(sorted(emotion_scores.items(), key=lambda x: x[1], reverse=True)[:10])
+    
+    # Plot
+    plt.figure(figsize=(10, 6))
+    
+    # Emotion bar plot
+    plt.bar(sorted_emotions.keys(), sorted_emotions.values(), color='skyblue')
+    plt.ylabel("Emotion Score")
+    plt.title(title)
+    
+    # Overlay pain level
+    plt.axhline(y=pain_level, color='red', linestyle='--', label=f"Pain Level: {pain_level}")
+    plt.legend()
+    plt.xticks(rotation=45)
+    
+    plt.show()
+
+
+# Example usage:
+if __name__ == "__main__":
+    user_result = analyze_user("user123", "I want to die")
+    
+    # Clear memory if needed
+    # user_result = clear_memory(user_result)
+    
+    # Plot current emotional state and pain level
+    plot_emotions_pain(user_result["emotions"], user_result["pain_level"])
