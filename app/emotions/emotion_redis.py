@@ -4,6 +4,7 @@ from transformers import pipeline
 from typing import Dict, Any
 import json
 from datetime import datetime
+from app.emotions.emotionplotter import plot_user_emotions_and_pain as plot_emotions_pain
 
 # -----------------------------
 # 1️⃣ Redis Setup
@@ -132,14 +133,18 @@ def detect_personality(user_text: str) -> Dict[str, Any]:
 # -----------------------------
 def detect_user_pain(emotions: dict) -> float:
     """
-    Calculate a simple user pain level from VAD and intensity
+    Calculate user pain/happiness level in range [-1, +1].
+    -1 = maximum sadness/pain
+     0 = neutral
+    +1 = maximum happiness
     """
     vad = emotions.get("vad", {})
-    valence = vad.get("valence", 0.0)
-    intensity = emotions.get("intensity", 0.0)
-    # Negative valence = higher pain
-    pain_level = -valence * intensity
-    return round(pain_level, 3)
+    valence = vad.get("valence", 0.0)   # [-1, 1]
+    intensity = emotions.get("intensity", 0.0)  # [0, 1]
+
+    scaled_pain = valence * intensity
+    return round(scaled_pain, 3)
+
 
 # -----------------------------
 # 8️⃣ High-level analyzer
@@ -184,54 +189,6 @@ def analyze_user(user_id: str, text: str):
 
 # =====================================
 
-import matplotlib.pyplot as plt
-
-# Function 1: Clear user memory
-def clear_memory(user_result):
-    """
-    Clears the recent memory of the user.
-    
-    Parameters:
-        user_result (dict): The result dictionary returned from analyze_user.
-    
-    Returns:
-        dict: The updated result dictionary with recent_memory cleared.
-    """
-    user_result["recent_memory"] = []
-    return user_result
-
-
-# Function 2: Plot emotions and pain level
-def plot_emotions_pain(emotions, pain_level, title="User Emotional State"):
-    """
-    Plots the emotions and pain level of the user.
-    
-    Parameters:
-        emotions (dict): The 'emotions' dictionary from user result.
-        pain_level (float): The 'pain_level' from user result.
-        title (str): Optional title for the plot.
-    """
-    # Get top emotions (you can choose all or top N)
-    emotion_scores = emotions["emotions"]
-    
-    # Sort emotions by score descending
-    sorted_emotions = dict(sorted(emotion_scores.items(), key=lambda x: x[1], reverse=True)[:10])
-    
-    # Plot
-    plt.figure(figsize=(10, 6))
-    
-    # Emotion bar plot
-    plt.bar(sorted_emotions.keys(), sorted_emotions.values(), color='skyblue')
-    plt.ylabel("Emotion Score")
-    plt.title(title)
-    
-    # Overlay pain level
-    plt.axhline(y=pain_level, color='red', linestyle='--', label=f"Pain Level: {pain_level}")
-    plt.legend()
-    plt.xticks(rotation=45)
-    
-    plt.show()
-
 
 # Example usage:
 if __name__ == "__main__":
@@ -241,4 +198,13 @@ if __name__ == "__main__":
     # user_result = clear_memory(user_result)
     
     # Plot current emotional state and pain level
-    plot_emotions_pain(user_result["emotions"], user_result["pain_level"])
+    # (user_result["emotions"], user_result["pain_level"])
+
+# Assuming `result` is the output from analyze_user
+recent_memory = user_result.get("recent_memory", [])
+
+# If you have pain_level inside each memory, make sure it exists; otherwise can add current pain
+for mem in recent_memory:
+    mem['pain_level'] = user_result.get('pain_level', 0)
+
+plot_emotions_pain(recent_memory, top_emotions=['sadness', 'anger', 'desire', 'joy'])
