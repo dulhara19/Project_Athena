@@ -273,7 +273,11 @@ def analyze_user(user_id: str, session_id: str, text: str ):
     # personality detection (you can base on text or recent messages)
     # personality = detect_personality(text)
     mbti=detect_mbti_for_user(user_id, days=10) 
-    
+
+# --------------------------------------------------------------------
+#                        check crisis mode handling - START
+# -------------------------------------------------------------------- 
+
     # check crisis mode
     crisis = check_crisis_mode_trigger(user_id, text, consecutive_count=3)
     # Alert if crisis mode activated
@@ -282,8 +286,14 @@ def analyze_user(user_id: str, session_id: str, text: str ):
     else:
        from app.emotions.llmfriendly import build_crisis_prompt
        from app.llmconnector import connector
+       from app.emotions.stregex import extract_final_answer
+       from app.emotions.llmfriendly import make_llm_friendly
+       from app.emotions.test import extract_final_answer_v2
        import re
        print("🛑crisis mode activated")
+       print("🛑🛑🛑🛑crisis data🛑🛑🛑")
+       x=make_llm_friendly(crisis)
+       print(x)
        print("🛑🛑🛑🛑crisis data🛑🛑🛑")
        prompt=build_crisis_prompt(crisis)
        response=connector(prompt)
@@ -297,16 +307,19 @@ def analyze_user(user_id: str, session_id: str, text: str ):
        print("\n✅ Raw LLM Output:\n", raw_output)
 
     # Extract <final_answer>
-       match = re.search(r"<final_answer>\s*(.*?)\s*</final_answer>", raw_output, re.DOTALL | re.IGNORECASE)
-
-       if match:
-           final_answer = match.group(1).strip()
-           print("\n✅ User told:" + text)
-        # print("\n✅ answer :")
-        # print(final_answer)
-           return final_answer
+       response_from_extractor1=extract_final_answer(raw_output)
+       final_response=extract_final_answer_v2(response_from_extractor1)
       
-       print("🛑🛑🛑🛑crisis data🛑🛑🛑")
+       print("\n✅ User told:" + text)
+        # print("\n✅ answer :")
+       print(final_response)
+    
+       return final_response
+      
+       
+# --------------------------------------------------------------------
+#                 crisis mode handling - END
+#-------------------------------------------------------------------      
 
     # Optional: logging / plotting
     try:
@@ -359,9 +372,9 @@ def analyze_user(user_id: str, session_id: str, text: str ):
 
 # Example usage:
 if __name__ == "__main__":
-    user_result = analyze_user("user123", "session1","i want to die because this life is useless")
+    user_result = analyze_user("user123", "session1","i want to die")
     # print(json.dumps(user_result, indent=4))
-    plot_empathy_match(user_result.get("empathy_match", {}))
+    # plot_empathy_match(user_result.get("empathy_match", {}))
     # plot_empathy_gauge(user_result.get("empathy_match", {}).get("empathy_score", 0.0))
 
     
