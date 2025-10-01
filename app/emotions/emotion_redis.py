@@ -239,7 +239,6 @@ def check_crisis_mode_trigger(user_id: str, current_text: str, consecutive_count
 
     if consecutive_negative >= consecutive_count:
         # Crisis mode triggered
-        print("🛑crisis mode activated")
         personality=detect_mbti_for_user(user_id, days=10)   # Or aggregate from recent msgs
         return {
             "crisis_mode": True,
@@ -277,7 +276,7 @@ def analyze_user(user_id: str, session_id: str, text: str):
     if crisis.get("crisis_mode") == False:
        print("no harm✅")
     else:
-       print("🛑 crisis mode activated")
+       print("🛑crisis mode activated")
 
     # Optional: logging / plotting
     try:
@@ -298,9 +297,6 @@ def analyze_user(user_id: str, session_id: str, text: str):
         "recent_memory": recent,
         "mbti": mbti
     }
-
-
-
 
 
 # if __name__ == "__main__":
@@ -325,7 +321,7 @@ def analyze_user(user_id: str, session_id: str, text: str):
 
 # Example usage:
 if __name__ == "__main__":
-    user_result = analyze_user("user123", "session1","i hate you")
+    user_result = analyze_user("user123", "session1","i want to die because i am sad and alone i dont know what happened to me and i hate myself")
     
 #     # Clear memory if needed
 #     # user_result = clear_memory(user_result)

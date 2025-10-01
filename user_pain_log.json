@@ -74,5 +74,9 @@
     {
         "user_query": "i hate you",
         "pain_status": -1.0
+    },
+    {
+        "user_query": "i want to die because i am sad and alone i dont know what happened to me and i hate myself",
+        "pain_status": -0.44
     }
 ]
