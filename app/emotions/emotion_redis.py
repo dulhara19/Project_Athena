@@ -341,7 +341,6 @@ def analyze_user(user_id: str, session_id: str, text: str ):
         "session_id": session_id,
         "text": text,
         "emotions": emotion_data,
-        # "personality": personality,
         "pain_level": pain,
         "recent_memory": recent,
         "mbti": mbti,
@@ -372,11 +371,12 @@ def analyze_user(user_id: str, session_id: str, text: str ):
 
 
 # Example usage:
-if __name__ == "__main__":
-    user_result = analyze_user("user123", "session1","love being with dogs and cats.. ")
-    print(json.dumps(user_result, indent=4))
-    summary=summarize_user_state(user_result)
-    print("\n✅ User summary:" + summary)
+# if __name__ == "__main__":
+#     user_result = analyze_user("user123", "session1","love being with dogs and cats.. ")
+#     print(json.dumps(user_result, indent=4))
+#     summary=summarize_user_state(user_result)
+#     print("🟢🟢🟢🟢summary🟢🟢🟢🟢")
+#     print(summary)
 
     # plot_empathy_match(user_result.get("empathy_match", {}))
     # plot_empathy_gauge(user_result.get("empathy_match", {}).get("empathy_score", 0.0))

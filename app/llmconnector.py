@@ -6,7 +6,7 @@ def connector(prompt):
     url = 'http://localhost:11434/api/generate'
     headers = {'Content-Type': 'application/json'}
     data = {
-       'model': 'deepseek-r1:1.5b',
+       'model': 'gpt-oss:20b',
        'prompt': prompt,
        'stream': False,  # Not using streaming
            }
