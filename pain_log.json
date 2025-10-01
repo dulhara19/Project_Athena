@@ -162,5 +162,9 @@
     {
         "user_query": "i hate classical music",
         "pain_status": 0.0
+    },
+    {
+        "user_query": "i hate classical music",
+        "pain_status": 0.0
     }
 ]

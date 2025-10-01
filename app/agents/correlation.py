@@ -196,13 +196,15 @@ def correlate_user_with_athena(
     }
 
 # ---------- quick example runner ----------
-if __name__ == "__main__":
-    # Example Athena ego (replace with your real ego import)
-    ego = {
-        "personality_type": "INTJ",
-        "personality": {"traits":["empathetic","curious","analytical"]},
-        "values": ["integrity","empathy"],
-        "interests": ["technology","philosophy"]
-    }
-    res = correlate_user_with_athena("user123", ego)
-    print(json.dumps(res, indent=2))
+# if __name__ == "__main__":
+#     # Example Athena ego (replace with your real ego import)
+#     ego = {
+#         "personality_type": "INTJ",
+#         "personality": {"traits":["empathetic","curious","analytical"]},
+#         "values": ["integrity","empathy"],
+#         "interests": ["technology","philosophy"]
+#     }
+#     res = correlate_user_with_athena("user123", ego)
+#     print(json.dumps(res, indent=2))
+
+

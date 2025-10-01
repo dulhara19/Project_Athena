@@ -5,7 +5,11 @@ from typing import Dict, Any
 import json
 from datetime import datetime
 
-
+from app.emotions.llmfriendly import make_llm_friendly
+from app.emotions.empathy import plot_empathy_gauge
+from app.emotions.empathy import plot_empathy_match
+from app.emotions.empathy import empathy_match
+from app.agents.ego_data import ego
 from app.emotions.mbti import detect_mbti_for_user
 from app.emotions.emotionplotter import log_pain_status
 from app.emotions.emotionplotter import plot_pain_history_fixed
@@ -184,7 +188,7 @@ def detect_user_pain(emotions: dict) -> float:
 # -----------------------------
 # 9️⃣ crisi mode detection
 # -----------------------------
-NEGATIVE_WORDS = ["die", "suicide", "hate", "sad", "depressed", "alone", "worthless", "unhappy"]
+NEGATIVE_WORDS = ["die", "suicide", "hate", "sad", "depressed", "alone", "worthless", "unhappy", "kill myself", "end it all", "no reason to live", "give up on my life", "life is a pain", "suffering", "miserable", "despair", "hopeless", "lonely", "cry", "crying", "burden", "sick of it all"]
 
 def check_crisis_mode_trigger(user_id: str, current_text: str, consecutive_count: int = 3) -> dict:
     """
@@ -239,7 +243,7 @@ def check_crisis_mode_trigger(user_id: str, current_text: str, consecutive_count
 
     if consecutive_negative >= consecutive_count:
         # Crisis mode triggered
-        personality=detect_mbti_for_user(user_id, days=10)   # Or aggregate from recent msgs
+        personality=detect_mbti_for_user(user_id, days=10)# Or aggregate from recent msgs
         return {
             "crisis_mode": True,
             "recent_messages": negative_messages,
@@ -253,7 +257,7 @@ def check_crisis_mode_trigger(user_id: str, current_text: str, consecutive_count
 # -----------------------------
 # 8️⃣ High-level analyzer
 # -----------------------------
-def analyze_user(user_id: str, session_id: str, text: str):
+def analyze_user(user_id: str, session_id: str, text: str ):
     """
     Analyze user: emotions, personality, pain, and store in Redis (with text).
     """
@@ -276,7 +280,12 @@ def analyze_user(user_id: str, session_id: str, text: str):
     if crisis.get("crisis_mode") == False:
        print("no harm✅")
     else:
+       from app.emotions.llmfriendly import build_crisis_prompt
        print("🛑crisis mode activated")
+       print("🛑🛑🛑🛑crisis data🛑🛑🛑")
+       build_crisis_prompt(crisis)
+      
+       print("🛑🛑🛑🛑crisis data🛑🛑🛑")
 
     # Optional: logging / plotting
     try:
@@ -287,6 +296,11 @@ def analyze_user(user_id: str, session_id: str, text: str):
         pass
 
     recent = get_recent_emotions(user_id, n=5)
+
+    # get recent_texts from Redis:
+    recent = [m.get("text","") for m in get_recent_emotions(user_id, n=6)]
+    empathy_match_result = empathy_match(user_id=user_id, ego=ego, emotion_analysis=emotion_data, recent_texts=recent, strategy="mirror")
+
     return {
         "user_id": user_id,
         "session_id": session_id,
@@ -295,7 +309,10 @@ def analyze_user(user_id: str, session_id: str, text: str):
         # "personality": personality,
         "pain_level": pain,
         "recent_memory": recent,
-        "mbti": mbti
+        "mbti": mbti,
+        "crisis_mode": crisis,
+        "empathy_match": empathy_match_result
+
     }
 
 
@@ -321,7 +338,11 @@ def analyze_user(user_id: str, session_id: str, text: str):
 
 # Example usage:
 if __name__ == "__main__":
-    user_result = analyze_user("user123", "session1","i want to die because i am sad and alone i dont know what happened to me and i hate myself")
+    user_result = analyze_user("user123", "session1","i want to die because this life is useless")
+    print(json.dumps(user_result, indent=4))
+    plot_empathy_match(user_result.get("empathy_match", {}))
+    # plot_empathy_gauge(user_result.get("empathy_match", {}).get("empathy_score", 0.0))
+
     
 #     # Clear memory if needed
 #     # user_result = clear_memory(user_result)
