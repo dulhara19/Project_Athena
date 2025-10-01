@@ -281,9 +281,30 @@ def analyze_user(user_id: str, session_id: str, text: str ):
        print("no harm✅")
     else:
        from app.emotions.llmfriendly import build_crisis_prompt
+       from app.llmconnector import connector
+       import re
        print("🛑crisis mode activated")
        print("🛑🛑🛑🛑crisis data🛑🛑🛑")
-       build_crisis_prompt(crisis)
+       prompt=build_crisis_prompt(crisis)
+       response=connector(prompt)
+       
+    # Parse and extract classification
+       result = response.json()
+       raw_output = result.get("response", "")
+
+    # debugging---
+    # Print raw output for debugging
+       print("\n✅ Raw LLM Output:\n", raw_output)
+
+    # Extract <final_answer>
+       match = re.search(r"<final_answer>\s*(.*?)\s*</final_answer>", raw_output, re.DOTALL | re.IGNORECASE)
+
+       if match:
+           final_answer = match.group(1).strip()
+           print("\n✅ User told:" + text)
+        # print("\n✅ answer :")
+        # print(final_answer)
+           return final_answer
       
        print("🛑🛑🛑🛑crisis data🛑🛑🛑")
 
@@ -339,7 +360,7 @@ def analyze_user(user_id: str, session_id: str, text: str ):
 # Example usage:
 if __name__ == "__main__":
     user_result = analyze_user("user123", "session1","i want to die because this life is useless")
-    print(json.dumps(user_result, indent=4))
+    # print(json.dumps(user_result, indent=4))
     plot_empathy_match(user_result.get("empathy_match", {}))
     # plot_empathy_gauge(user_result.get("empathy_match", {}).get("empathy_score", 0.0))
 
