@@ -4,7 +4,7 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
-from app.emotions.nuregex import extract_pain_level
+from app.emotions.nuregex import extract_final_answer
 
 
 def wedana_classifier(user_input,ego):
@@ -62,10 +62,10 @@ AI:
     final_answer = None
 
  
-    val, dbg = extract_pain_level(raw_output)
-    print("RAW:", raw_output)
-    print("-> value:", val, "method:", dbg["method"], "candidates:", dbg["candidates"])
-    print("-" * 60)
+    val= extract_final_answer(raw_output)
+    # print("RAW:", raw_output)
+    # print("-> value:", val, "method:", dbg["method"], "candidates:", dbg["candidates"])
+    # print("-" * 60)
 
 
 

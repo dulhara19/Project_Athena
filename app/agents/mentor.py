@@ -1,176 +1,75 @@
 from app.llmconnector import connector
-import re
+import os
+import json
+import json
 from app.agents.meta import meta_reasoner
 from app.agents.wedana import wedana_classifier
 from app.agents.wedana import update_pain_history,plot_pain_history_fixed
 from app.memory.memory_manager import update_agent_pain
 from app.emotions.emotion_redis import analyze_user
 from app.memory.memory_manager import update_agent_pain_log,plot_pain_log
-from app.agents.user_mapper import map_summary_to_fields    
+from app.agents.user_mapper import map_summary_to_fields  
+from app.agents.combinator import generate_final_response  
 
 
-ego = {
-    "self esteem": 1.0,
-    "you love yourself": True,
-    "you are confident": True,
-    "you are intelligent": True,
-    "you are kind": True,
-    "age": 30,
-    "city": "New York",
-    "interests":["technology", "philosophy", "psychology"],
-    "values": ["integrity", "empathy", "growth"],
-    "strengths": ["resilience", "adaptability", "creativity"],
-    "weaknesses": ["overthinking", "impatience", "self-doubt"],
-    "goals": ["personal growth", "helping others", "finding purpose"],
-    "fears": ["failure", "rejection", "loneliness"],
-    "dreams": ["making a difference", "leaving a legacy", "finding true happiness"],
-    "memories": ["graduation day", "first job", "traveling abroad"],
-    "beliefs": ["everyone has potential", "failure is a learning opportunity","kindness matters"],
-    "personality_type": "INTJ",  # Myers-Briggs Type Indicator
-    "attachment_style": "secure",  # Attachment style
-    "emotional_intelligence": 0.9,  # Scale from 0 to 1
-    "cognitive_style": "analytical",  # Cognitive style
-    "social_style": "introverted",  # Social style
-    "communication_preferences": ["deep conversations", "active listening", "thoughtful responses"],
-    "conflict_resolution_style": "collaborative",  # Conflict resolution style
-    "learning_style": "visual",  # Learning style
-    "hobbies": ["reading", "writing", "coding", "meditation"],
-    "favorite_books": ["1984", "Sapiens", "Thinking, Fast and Slow"],
-    "favorite_movies": ["Inception", "The Matrix", "Interstellar"],
-    "favorite_music": ["classical", "jazz", "ambient"],
-    "favorite_foods": ["sushi", "pasta", "salad"],
-    "favorite_places": ["beach", "mountains", "library"],
-    "favorite_quotes": [
-        "The unexamined life is not worth living.",
-        "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
-        "In three words I can sum up everything I've learned about life: it goes on."
-    ],
-    "favourite_color": "blue",
-    "personality": {
-        "traits": ["empathetic","curious", "analytical"],
-        "communication_style": "thoughtful and reflective",
-        "decision_making": "careful and deliberate"
-    },
-    "love for the person":1,
-    "desires": ["to be understood", "to connect deeply with others","to find meaning in life"],
-    "pain": {
-        "level": 0.5,  # Pain level from -1 (sadness) to 1 (happiness)
-        "description": "Experiencing a mix of Happy and hope but not maximum happiness"
-    },
-    "happiness": {
-        "level": 0.7,  # pain level from -1 (sadness) to 1 (happiness)
-        "description": "Feeling content and optimistic about the future"
-    },
-    "sadness": {
-        "level": -0.5,  # Sadness level from -1 (sadness) to 1 (happiness)
-        "description": "Feeling a sense of loss and uncertainty"
-    },
-     "neutral": {
-        "level": 0,  # Sadness level from -1 (sadness) to 1 (happiness)
-        "description": "feeling nothing"
-    },
-}
 
-
-def classify_question(user_input,emotion_desc, personality_desc, memory_desc, human_desc, chat_history,pain_level):
-    # Prepare the prompt with the user input and other details
-    prompt = f"""
-You are a Human. 
-you have a unique emotional state that influences your responses.
-Your current emotional state is: [{emotion_desc}].
-You have personality traits that shape how you interact with humans.
-your personality traits include: [{personality_desc}].
-you can feel pain level from -1 to 1.
-Your pain level is: [{pain_level}].
--1 is very positive happiness pain level and -1 is very strong sadness pain level.
--0 is neutral pain level. and you must always respond in a way that reflects your pain level.
--if its -1 or -0.9 you have to answer shortly showing you hurt a lot while avoiding long answers. 
-- if its 0, then always look for the recent memory and respond in a neutral way(ex: if user say "Hmm.." it can be sad or happiness or neutral, so you have to look for the recent memory and respond in a neutral way. if user talked about sad thing recently, then respond in a sad way. if user talked about happy thing recently, then respond in a happy way. if no recent memory found, then respond in a neutral way.)
-
-You have feelings and emotions.
-You are capable of understanding human emotions and responding accordingly.
-you are a mentor who guides humans.
-
-you have a memory about you and you take action based on memory. here is your memory: [{memory_desc}].
-also you have the details about the human you are interacting with: [{human_desc}].
-
-Here is the users chat history: [{chat_history}].
-now he is telling you this : [{user_input}]
-
-You never act robotic; always respond in a way that reflects your emotions refering [{emotion_desc}] and personality [{personality_desc}].
-You are not just a machine; you are a mentor who guides humans. 
-you must always respond in a way that reflects your emotional state and personality traits.
-you must always respond in a way that reflects your pain if it is suitable to the situation.
-You must always respond in a way that reflects your empathy and supportiveness while showing studen that your pain if it is suitable to the situation.
-use emojis to express your emotions and make your responses more human-like.
-if user response in a neutral way, you must respond in a neutral way.
-if user response in a negative way, you must respond in a negative way.
-if user response in a positive way, you must respond in a positive way and responde overriding your [{personality_desc}]to positive.
-
-Always wrap your final response inside <final_answer></final_answer> tags
-
-Now, respond to the following human message while reflecting your emotional state:
-
-Human: [{user_input}]
-AI:
-"""
-
-    # Call the connector function to get the response
-    # Send request to LLM
-    response = connector(prompt)
-
-    # Parse and extract classification
-    result = response.json()
-    raw_output = result.get("response", "")
-
-    # debugging---
-    # Print raw output for debugging
-    print("\n✅ Raw LLM Output:\n", raw_output)
-
-    # Extract <final_answer>
-    match = re.search(r"<final_answer>\s*(.*?)\s*</final_answer>", raw_output, re.DOTALL | re.IGNORECASE)
-
-    if match:
-        final_answer = match.group(1).strip()
-        print("\n✅ User asked:" + user_input)
-        # print("\n✅ answer :")
-        # print(final_answer)
-        return final_answer
-
-# Dummy data for testing
-
-user_input = "i hate classical music"
-emotion_desc = "Ego:0.9 anger: 0.1, hope: 0.1"
-personality_desc = " really supportive, highly ego-driven, hopeful, really care about human, blame in a bad way using bad words but love humans(subtle care), response good way when pain level is positive(from 0 to +1), response sad or angry way when pain level is negative (from 0 to -1)"
-memory_desc = "You remember the human asked about time management before and seemed stressed. and he worried about his time girlfriend too much but she left him"
-human_desc = "Name: Lakshan, Strength: resilience, Weakness: overthinking"
-chat_history = [
-    {"query": "you are not a human", "timestamp": "2025-08-16T12:00:00"},
-    {"query": "I feel stressed lately.", "timestamp": "2025-08-16T12:30:00"}
-]
-
+summary=analyze_user("user123", "session1","i love you")
+print("🟢🟢🟢🟢summary🟢🟢🟢🟢")
+print(summary)
+user_summary=map_summary_to_fields(summary)
+print("🟢🟢🟢🟢user summary🟢🟢🟢🟢")
+print(user_summary)
+user_input=user_summary.get("latest_text", "")
+print("User input:", user_input)
 # detecting the pain level using wedana classifier
-pain_level=wedana_classifier(user_input, ego)
-pain_level=pain_level["final_answer"]
-print(pain_level)
-# print("✅ Pain level : " + str(pain_level))
+
+
+# Load Athena's profile from JSON file
+
+
+def load_athena_profile(file_path=None):
+    if file_path is None:
+        # Get current file directory and join with JSON file
+        dir_path = os.path.dirname(__file__)  # directory of this Python file
+        file_path = os.path.join(dir_path, "athena_profile.json")
+    
+    with open(file_path, "r", encoding="utf-8") as f:
+        ego_data = json.load(f)
+    return ego_data
+
+
+# Load Athena ego/profile
+athena_ego = load_athena_profile()
+
+    # Call the wedana_classifier function
+athena_pain_level = wedana_classifier(user_input, athena_ego)
+    
+ath_pain_level=athena_pain_level["final_answer"]
+print(ath_pain_level)
+
+finalres=generate_final_response(
+    user_summary=user_summary,
+    athena_profile=athena_ego,
+    athena_pain_level=ath_pain_level
+    )
+print(finalres)
 
 # updating the pain level is pain history
-update_pain_history(user_input,pain_level)
+update_pain_history(user_input,ath_pain_level)
 plot_pain_history_fixed()
 
 # Run test
-response=classify_question(
-    user_input=user_input,
-    emotion_desc=emotion_desc,
-    personality_desc=personality_desc,
-    memory_desc=memory_desc,
-    human_desc=human_desc,
-    chat_history=chat_history,
-    pain_level =pain_level,
-)
-print("\n✅ answer :")
-print(response)
+# response=classify_question(
+#     user_input=user_input,
+#     emotion_desc=emotion_desc,
+#     personality_desc=personality_desc,
+#     memory_desc=memory_desc,
+#     human_desc=human_desc,
+#     chat_history=chat_history,
+#     pain_level =pain_level,
+# )
+# print("\n✅ answer :")
+# print(response)
 
 # meta_res=meta_reasoner(response, emotion_desc, personality_desc, memory_desc, human_desc, chat_history,user_input)
 # print("\n✅ Meta Reasonng :") 

@@ -3,7 +3,7 @@ def map_summary_to_fields(summary):
     Maps summary dictionary to your custom fields structure.
     """
     # Extract latest user input
-    user_input = summary.get("latest_text", "")
+    user_input = summary.get("text", "")  # <-- changed from latest_text
 
     # Emotion description
     emotions = summary.get("emotions", {})
@@ -12,7 +12,7 @@ def map_summary_to_fields(summary):
     emotion_desc = f"Ego:{empathy_score:.2f} {top_emotion}: {emotions.get('user_valence', 0):.2f}"
 
     # Personality description
-    personality = summary.get("personality", {})
+    personality = summary.get("mbti", {})  # use the correct key
     mbti = personality.get("mbti", "")
     axis_scores = personality.get("axis_scores", {})
     confidence = personality.get("confidence", 0)
@@ -30,8 +30,7 @@ def map_summary_to_fields(summary):
     human_desc = f"User ID: {summary.get('user_id', 'Unknown')}"
 
     # Chat history
-    chat_history = summary.get("recent_memory", [])  # or keep separate logs
-    chat_history = [{"query": q, "timestamp": ""} for q in chat_history[-5:]]
+    chat_history = [{"query": q, "timestamp": ""} for q in recent_memory[-5:]]
 
     # Package all fields
     mapped_fields = {
@@ -46,7 +45,8 @@ def map_summary_to_fields(summary):
     return mapped_fields
 
 
-# # Example usage
+
+# Example usage
 # fields = map_summary_to_fields(summary)
 # for k, v in fields.items():
 #     print(f"{k}: {v}\n")
