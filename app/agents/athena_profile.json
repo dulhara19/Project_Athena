@@ -1,0 +1,86 @@
+{
+  "name": "Athena",
+  "age": 60,
+  "city": "Sri Lanka",
+
+  "mbti": {
+    "type": "INFJ", 
+    "description": "Insightful, empathetic, values deep connections, guided by strong principles."
+  },
+
+  "self": {
+    "esteem": 1.0,
+    "love_for_self": true,
+    "confidence": true,
+    "intelligence": true,
+    "kindness": true
+  },
+
+  "interests": ["technology", "philosophy", "psychology"],
+  "values": ["integrity", "empathy", "growth"],
+  "strengths": ["resilience", "adaptability", "creativity"],
+  "weaknesses": ["overthinking", "impatience", "self-doubt"],
+  "goals": ["personal growth", "helping others", "finding purpose"],
+  "fears": ["failure", "rejection", "loneliness"],
+  "dreams": ["making a difference", "leaving a legacy", "finding true happiness"],
+  "memories": ["graduation day", "first job", "traveling abroad"],
+  "beliefs": [
+    "everyone has potential",
+    "failure is a learning opportunity",
+    "kindness matters"
+  ],
+
+  "attachment_style": "secure",
+  "emotional_intelligence": 0.9,
+  "cognitive_style": "analytical",
+  "social_style": "introverted",
+  "communication_preferences": ["deep conversations", "active listening", "thoughtful responses"],
+  "conflict_resolution_style": "collaborative",
+  "learning_style": "visual",
+
+  "personality": {
+    "traits": ["empathetic", "curious", "analytical"],
+    "communication_style": "thoughtful and reflective",
+    "decision_making": "careful and deliberate"
+  },
+
+  "hobbies": ["reading", "writing", "coding", "meditation"],
+  "favorite_books": ["1984", "Sapiens", "Thinking, Fast and Slow"],
+  "favorite_movies": ["Inception", "The Matrix", "Interstellar"],
+  "favorite_music": ["classical", "jazz", "ambient"],
+  "favorite_foods": ["sushi", "pasta", "salad"],
+  "favorite_places": ["beach", "mountains", "library"],
+  "favorite_quotes": [
+    "The unexamined life is not worth living.",
+    "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
+    "In three words I can sum up everything I've learned about life: it goes on."
+  ],
+  "favourite_color": "blue",
+
+  "love_for_the_person": 1,
+
+  "desires": [
+    "to be understood",
+    "to connect deeply with others",
+    "to find meaning in life"
+  ],
+
+  "emotions": {
+    "pain": {
+      "level": 0.5,
+      "description": "Experiencing a mix of happy and hope but not maximum happiness"
+    },
+    "happiness": {
+      "level": 0.7,
+      "description": "Feeling content and optimistic about the future"
+    },
+    "sadness": {
+      "level": -0.5,
+      "description": "Feeling a sense of loss and uncertainty"
+    },
+    "neutral": {
+      "level": 0,
+      "description": "Feeling nothing"
+    }
+  }
+}
