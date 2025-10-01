@@ -1,0 +1,42 @@
+[
+    {
+        "user_query": "I want to die",
+        "pain_status": -0.41
+    },
+    {
+        "user_query": "I want to die",
+        "pain_status": -0.41
+    },
+    {
+        "user_query": "I was strugling to find a job and now I am happy that I found one",
+        "pain_status": 0.68
+    },
+    {
+        "user_query": "I was strugling to find a job and now I am happy that I found one",
+        "pain_status": 0.68
+    },
+    {
+        "user_query": "I was strugling to find a job and now I am happy that I found one",
+        "pain_status": 0.68
+    },
+    {
+        "user_query": "I was strugling to find a job and now I am happy that I found one",
+        "pain_status": 0.68
+    },
+    {
+        "user_query": "I love you  ",
+        "pain_status": 1.0
+    },
+    {
+        "user_query": "i hate classical music",
+        "pain_status": -1.0
+    },
+    {
+        "user_query": "i hate you ",
+        "pain_status": -1.0
+    },
+    {
+        "user_query": "i hate you ",
+        "pain_status": -1.0
+    }
+]

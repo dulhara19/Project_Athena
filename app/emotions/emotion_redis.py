@@ -4,7 +4,9 @@ from transformers import pipeline
 from typing import Dict, Any
 import json
 from datetime import datetime
-from app.emotions.emotionplotter import plot_user_emotions_and_pain as plot_emotions_pain
+
+from app.emotions.emotionplotter import log_pain_status
+from app.emotions.emotionplotter import plot_pain_history_fixed
 
 # -----------------------------
 # 1️⃣ Redis Setup
@@ -101,7 +103,7 @@ def store_user_emotion(user_id: str, emotion_data: dict):
     timestamp = datetime.now().isoformat()
     entry = {"timestamp": timestamp, "emotion": emotion_data}
     r.rpush(key, json.dumps(entry))
-    r.expire(key, 3600*24)  # keep for 24 hours
+    r.expire(key, 3600*24*7)  # keep for 24 hours
 
 def get_recent_emotions(user_id: str, n: int = 5):
     """
@@ -133,18 +135,24 @@ def detect_personality(user_text: str) -> Dict[str, Any]:
 # -----------------------------
 def detect_user_pain(emotions: dict) -> float:
     """
-    Calculate user pain/happiness level in range [-1, +1].
-    -1 = maximum sadness/pain
+    Calculate user pain level in range [-1, 1].
+    -1 = maximum sadness
      0 = neutral
-    +1 = maximum happiness
+     1 = maximum happiness
     """
     vad = emotions.get("vad", {})
-    valence = vad.get("valence", 0.0)   # [-1, 1]
-    intensity = emotions.get("intensity", 0.0)  # [0, 1]
+    valence = vad.get("valence", 0.0)   # -1 (sad) → +1 (happy)
+    intensity = emotions.get("intensity", 1.0)  # 0 → 1 scaling
 
-    scaled_pain = valence * intensity
-    return round(scaled_pain, 3)
+    # Simple scaling factor to amplify pain to visible range
+    pain_level = valence * intensity * 10
 
+    # Clamp to [-1, 1] and round to 2 decimals
+    pain_level = max(-1.0, min(1.0, pain_level))
+    return round(pain_level, 2)
+
+
+ 
 
 # -----------------------------
 # 8️⃣ High-level analyzer
@@ -157,6 +165,9 @@ def analyze_user(user_id: str, text: str):
     store_user_emotion(user_id, emotion_data)
     personality = detect_personality(text)
     pain = detect_user_pain(emotion_data)
+    log_pain_status(text, pain)  # log to JSON file
+    plot_pain_history_fixed()  # update pain plot
+
     recent = get_recent_emotions(user_id)
     return {
         "user_id": user_id,
@@ -192,19 +203,16 @@ def analyze_user(user_id: str, text: str):
 
 # Example usage:
 if __name__ == "__main__":
-    user_result = analyze_user("user123", "I want to die")
+    user_result = analyze_user("user123", "i hate you ")
     
-    # Clear memory if needed
-    # user_result = clear_memory(user_result)
-    
-    # Plot current emotional state and pain level
-    # (user_result["emotions"], user_result["pain_level"])
+#     # Clear memory if needed
+#     # user_result = clear_memory(user_result)
 
-# Assuming `result` is the output from analyze_user
-recent_memory = user_result.get("recent_memory", [])
+# # Assuming `result` is the output from analyze_user
+# recent_memory = user_result.get("recent_memory", [])
 
-# If you have pain_level inside each memory, make sure it exists; otherwise can add current pain
-for mem in recent_memory:
-    mem['pain_level'] = user_result.get('pain_level', 0)
+# # If you have pain_level inside each memory, make sure it exists; otherwise can add current pain
+# for mem in recent_memory:
+#     mem['pain_level'] = user_result.get('pain_level', 0)
 
-plot_emotions_pain(recent_memory, top_emotions=['sadness', 'anger', 'desire', 'joy'])
+# plot_emotions_pain(recent_memory, top_emotions=['sadness', 'anger', 'desire', 'joy'])
