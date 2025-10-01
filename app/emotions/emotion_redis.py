@@ -5,7 +5,7 @@ from typing import Dict, Any
 import json
 from datetime import datetime
 
-from app.emotions.crisismode import check_crisis_mode
+
 from app.emotions.mbti import detect_mbti_for_user
 from app.emotions.emotionplotter import log_pain_status
 from app.emotions.emotionplotter import plot_pain_history_fixed
@@ -144,19 +144,19 @@ def get_recent_emotions(user_id: str, n: int = 5):
 # -----------------------------
 # 6️⃣ Personality detection
 # -----------------------------
-def detect_personality(user_text: str) -> Dict[str, Any]:
-    """
-    Simple placeholder for personality detection (expand later)
-    """
-    traits = []
-    text = user_text.lower()
-    if any(x in text for x in ["i feel", "i am sad", "depressed"]):
-        traits.append("emotional")
-    if any(x in text for x in ["plan", "goal", "achieve"]):
-        traits.append("analytical")
-    if any(x in text for x in ["help others", "care", "support"]):
-        traits.append("empathetic")
-    return {"personality_traits": traits, "sample_text": user_text}
+# def detect_personality(user_text: str) -> Dict[str, Any]:
+#     """
+#     Simple placeholder for personality detection (expand later)
+#     """
+#     traits = []
+#     text = user_text.lower()
+#     if any(x in text for x in ["i feel", "i am sad", "depressed"]):
+#         traits.append("emotional")
+#     if any(x in text for x in ["plan", "goal", "achieve"]):
+#         traits.append("analytical")
+#     if any(x in text for x in ["help others", "care", "support"]):
+#         traits.append("empathetic")
+#     return {"personality_traits": traits, "sample_text": user_text}
 
 # -----------------------------
 # 7️⃣ User pain detection
@@ -179,45 +179,7 @@ def detect_user_pain(emotions: dict) -> float:
     pain_level = max(-1.0, min(1.0, pain_level))
     return round(pain_level, 2)
 
-# -----------------------------
-# 8️⃣ High-level analyzer
-# -----------------------------
-def analyze_user(user_id: str, session_id: str, text: str):
-    """
-    Analyze user: emotions, personality, pain, and store in Redis (with text).
-    """
-    # Run emotion analysis
-    emotion_data = analyze_emotion_text(text)
 
-    # compute pain (you have detect_user_pain earlier; adapt if needed)
-    pain = detect_user_pain(emotion_data)
-
-    # store the text + analysis + pain + session info
-    store_user_emotion(user_id=user_id, session_id=session_id, text=text, emotion_data=emotion_data, pain=pain)
-
-    # personality detection (you can base on text or recent messages)
-    personality = detect_personality(text)
-    mbti=detect_mbti_for_user(user_id, days=10) 
-
-    # Optional: logging / plotting
-    try:
-        log_pain_status(text, pain)
-        plot_pain_history_fixed()
-    except Exception:
-        # plotting failures should not break analysis
-        pass
-
-    recent = get_recent_emotions(user_id, n=5)
-    return {
-        "user_id": user_id,
-        "session_id": session_id,
-        "text": text,
-        "emotions": emotion_data,
-        "personality": personality,
-        "pain_level": pain,
-        "recent_memory": recent,
-        "mbti": mbti
-    }
 
 # -----------------------------
 # 9️⃣ crisi mode detection
@@ -270,13 +232,15 @@ def check_crisis_mode_trigger(user_id: str, current_text: str, consecutive_count
         if is_negative:
             consecutive_negative += 1
             negative_messages.append(msg)
+            print("🛑detected:negativity in previouse msg")
         else:
             consecutive_negative = 0
             negative_messages = []
 
     if consecutive_negative >= consecutive_count:
         # Crisis mode triggered
-        personality = detect_personality(current_text)  # Or aggregate from recent msgs
+        print("🛑crisis mode activated")
+        personality=detect_mbti_for_user(user_id, days=10)   # Or aggregate from recent msgs
         return {
             "crisis_mode": True,
             "recent_messages": negative_messages,
@@ -284,9 +248,56 @@ def check_crisis_mode_trigger(user_id: str, current_text: str, consecutive_count
             "emotions": [msg.get("emotion") for msg in negative_messages],
             "personality": personality
         }
-
+    
     return {"crisis_mode": False}
 
+# -----------------------------
+# 8️⃣ High-level analyzer
+# -----------------------------
+def analyze_user(user_id: str, session_id: str, text: str):
+    """
+    Analyze user: emotions, personality, pain, and store in Redis (with text).
+    """
+    # Run emotion analysis
+    emotion_data = analyze_emotion_text(text)
+
+    # compute pain (you have detect_user_pain earlier; adapt if needed)
+    pain = detect_user_pain(emotion_data)
+
+    # store the text + analysis + pain + session info
+    store_user_emotion(user_id=user_id, session_id=session_id, text=text, emotion_data=emotion_data, pain=pain)
+
+    # personality detection (you can base on text or recent messages)
+    # personality = detect_personality(text)
+    mbti=detect_mbti_for_user(user_id, days=10) 
+    
+    # check crisis mode
+    crisis = check_crisis_mode_trigger(user_id, text, consecutive_count=3)
+    # Alert if crisis mode activated
+    if crisis.get("crisis_mode") == False:
+       print("no harm✅")
+    else:
+       print("🛑 crisis mode activated")
+
+    # Optional: logging / plotting
+    try:
+        log_pain_status(text, pain)
+        plot_pain_history_fixed()
+    except Exception:
+        # plotting failures should not break analysis
+        pass
+
+    recent = get_recent_emotions(user_id, n=5)
+    return {
+        "user_id": user_id,
+        "session_id": session_id,
+        "text": text,
+        "emotions": emotion_data,
+        # "personality": personality,
+        "pain_level": pain,
+        "recent_memory": recent,
+        "mbti": mbti
+    }
 
 
 
@@ -314,7 +325,7 @@ def check_crisis_mode_trigger(user_id: str, current_text: str, consecutive_count
 
 # Example usage:
 if __name__ == "__main__":
-    user_result = analyze_user("user123", "session1","i love you")
+    user_result = analyze_user("user123", "session1","i hate you")
     
 #     # Clear memory if needed
 #     # user_result = clear_memory(user_result)

@@ -62,5 +62,17 @@
     {
         "user_query": "i love you",
         "pain_status": 1.0
+    },
+    {
+        "user_query": "i hate you",
+        "pain_status": -1.0
+    },
+    {
+        "user_query": "i hate you",
+        "pain_status": -1.0
+    },
+    {
+        "user_query": "i hate you",
+        "pain_status": -1.0
     }
 ]
