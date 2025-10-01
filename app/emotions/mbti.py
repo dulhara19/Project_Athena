@@ -168,10 +168,10 @@ def plot_mbti_radar(axis_scores: dict, mbti_label: str):
 # -----------------------------
 # Top-level: fetch Redis and infer MBTI
 # -----------------------------
-# def detect_mbti_for_user(user_id: str, days: int):
-#     messages = get_recent_messages(user_id, days=days)
-#     result = infer_mbti(messages)
-#     return result
+def detect_mbti_for_user(user_id: str, days: int):
+    messages = get_recent_messages(user_id, days=days)
+    result = infer_mbti(messages)
+    return result
 
 # -----------------------------
 # Test run
