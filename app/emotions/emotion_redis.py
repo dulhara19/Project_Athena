@@ -275,7 +275,7 @@ def analyze_user(user_id: str, session_id: str, text: str ):
     mbti=detect_mbti_for_user(user_id, days=10) 
 
 # --------------------------------------------------------------------
-#                        check crisis mode handling - START
+#-------------check crisis mode handling - START----------------------
 # -------------------------------------------------------------------- 
 
     # check crisis mode
@@ -288,7 +288,7 @@ def analyze_user(user_id: str, session_id: str, text: str ):
        from app.llmconnector import connector
        from app.emotions.stregex import extract_final_answer
        from app.emotions.llmfriendly import make_llm_friendly
-       from app.emotions.test import extract_final_answer_v2
+       from app.emotions.llmfriendly import extract_final_answer_v2
        import re
        print("🛑crisis mode activated")
        print("🛑🛑🛑🛑crisis data🛑🛑🛑")
@@ -317,8 +317,8 @@ def analyze_user(user_id: str, session_id: str, text: str ):
        return final_response
       
        
-# --------------------------------------------------------------------
-#                 crisis mode handling - END
+# ------------------------------------------------------------------
+#----------------crisis mode handling - END-------------------------
 #-------------------------------------------------------------------      
 
     # Optional: logging / plotting
