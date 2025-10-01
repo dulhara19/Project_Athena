@@ -5,6 +5,7 @@ from typing import Dict, Any
 import json
 from datetime import datetime
 
+from app.emotions.mbti import detect_mbti_for_user
 from app.emotions.emotionplotter import log_pain_status
 from app.emotions.emotionplotter import plot_pain_history_fixed
 
@@ -95,23 +96,49 @@ def analyze_emotion_text(text: str) -> Dict[str, Any]:
 # -----------------------------
 # 5️⃣ Redis short-term memory
 # -----------------------------
-def store_user_emotion(user_id: str, emotion_data: dict):
+def store_user_emotion(user_id: str, session_id: str, text: str, emotion_data: dict, pain: float, max_len: int = 200):
     """
-    Store user emotion in Redis with timestamp.
+    Store the user message and its emotion analysis in Redis.
+    - user_id: user identifier
+    - session_id: session identifier (optional but useful)
+    - text: raw user message (string)
+    - emotion_data: dict returned from analyze_emotion_text
+    - pain: numeric pain level
+    - max_len: max number of entries to keep in list
     """
     key = f"user:{user_id}:emotions"
-    timestamp = datetime.now().isoformat()
-    entry = {"timestamp": timestamp, "emotion": emotion_data}
+    timestamp = datetime.utcnow().isoformat()
+    entry = {
+        "ts": timestamp,
+        "session_id": session_id,
+        "text": text,
+        "emotion": emotion_data,
+        "pain": float(pain)
+    }
+    # push to right so chronological order is preserved (oldest on left)
     r.rpush(key, json.dumps(entry))
-    r.expire(key, 3600*24*7)  # keep for 24 hours
+    # keep list bounded
+    r.ltrim(key, -max_len, -1)
+    # set expiration (e.g., 30 days) — tune as needed
+    r.expire(key, 30 * 24 * 3600)
+
+
 
 def get_recent_emotions(user_id: str, n: int = 5):
     """
-    Get last n emotions from Redis.
+    Return last n entries (most recent first) as parsed objects.
     """
     key = f"user:{user_id}:emotions"
-    entries = r.lrange(key, -n, -1)
-    return [json.loads(e) for e in entries]
+    # LRANGE with negative indices: -n to -1 returns last n in chronological order,
+    # but we want most-recent-first, so get -n..-1 then reverse
+    raw_list = r.lrange(key, -n, -1)
+    # If list is empty, raw_list == []
+    parsed = [json.loads(x) for x in raw_list] if raw_list else []
+    # reverse so most recent is first
+    parsed.reverse()
+    return parsed
+
+
 
 # -----------------------------
 # 6️⃣ Personality detection
@@ -157,25 +184,41 @@ def detect_user_pain(emotions: dict) -> float:
 # -----------------------------
 # 8️⃣ High-level analyzer
 # -----------------------------
-def analyze_user(user_id: str, text: str):
+def analyze_user(user_id: str, session_id: str, text: str):
     """
-    Analyze user: emotions, personality, pain, and store in Redis
+    Analyze user: emotions, personality, pain, and store in Redis (with text).
     """
+    # Run emotion analysis
     emotion_data = analyze_emotion_text(text)
-    store_user_emotion(user_id, emotion_data)
-    personality = detect_personality(text)
-    pain = detect_user_pain(emotion_data)
-    log_pain_status(text, pain)  # log to JSON file
-    plot_pain_history_fixed()  # update pain plot
 
-    recent = get_recent_emotions(user_id)
+    # compute pain (you have detect_user_pain earlier; adapt if needed)
+    pain = detect_user_pain(emotion_data)
+
+    # store the text + analysis + pain + session info
+    store_user_emotion(user_id=user_id, session_id=session_id, text=text, emotion_data=emotion_data, pain=pain)
+
+    # personality detection (you can base on text or recent messages)
+    personality = detect_personality(text)
+    mbti=detect_mbti_for_user(user_id, days=10) 
+
+    # Optional: logging / plotting
+    try:
+        log_pain_status(text, pain)
+        plot_pain_history_fixed()
+    except Exception:
+        # plotting failures should not break analysis
+        pass
+
+    recent = get_recent_emotions(user_id, n=5)
     return {
         "user_id": user_id,
+        "session_id": session_id,
         "text": text,
         "emotions": emotion_data,
         "personality": personality,
         "pain_level": pain,
-        "recent_memory": recent
+        "recent_memory": recent,
+        "mbti": mbti
     }
 
 # -----------------------------
@@ -203,7 +246,7 @@ def analyze_user(user_id: str, text: str):
 
 # Example usage:
 if __name__ == "__main__":
-    user_result = analyze_user("user123", "i hate you ")
+    user_result = analyze_user("user123", "session1","i love you")
     
 #     # Clear memory if needed
 #     # user_result = clear_memory(user_result)
