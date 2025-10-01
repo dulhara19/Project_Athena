@@ -52,3 +52,6 @@ def check_crisis_mode(user_id: str, current_input: str) -> Dict:
         }
 
     return {"crisis_mode": False}
+
+result=check_crisis_mode("user123", "I want to die")
+print(json.dumps(result, indent=2))

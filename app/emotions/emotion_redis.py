@@ -5,6 +5,7 @@ from typing import Dict, Any
 import json
 from datetime import datetime
 
+from app.emotions.crisismode import check_crisis_mode
 from app.emotions.mbti import detect_mbti_for_user
 from app.emotions.emotionplotter import log_pain_status
 from app.emotions.emotionplotter import plot_pain_history_fixed
@@ -178,9 +179,6 @@ def detect_user_pain(emotions: dict) -> float:
     pain_level = max(-1.0, min(1.0, pain_level))
     return round(pain_level, 2)
 
-
- 
-
 # -----------------------------
 # 8️⃣ High-level analyzer
 # -----------------------------
@@ -222,8 +220,78 @@ def analyze_user(user_id: str, session_id: str, text: str):
     }
 
 # -----------------------------
-# 9️⃣ Test run
+# 9️⃣ crisi mode detection
 # -----------------------------
+NEGATIVE_WORDS = ["die", "suicide", "hate", "sad", "depressed", "alone", "worthless", "unhappy"]
+
+def check_crisis_mode_trigger(user_id: str, current_text: str, consecutive_count: int = 3) -> dict:
+    """
+    Check if crisis mode should be activated.
+    Returns:
+        {
+            "crisis_mode": bool,
+            "recent_messages": [...],
+            "pain_levels": [...],
+            "emotions": [...],
+            "personality": {...}
+        }
+    """
+    current_text_lower = current_text.lower()
+    if not any(word in current_text_lower for word in NEGATIVE_WORDS):
+        # If current message not negative, don't check further
+        return {"crisis_mode": False}
+
+    # Get the last N messages (most recent first)
+    recent_msgs = get_recent_emotions(user_id, n=consecutive_count)
+    if not recent_msgs:
+        return {"crisis_mode": False}
+
+    # Include current message as last item
+    current_emotion_data = analyze_emotion_text(current_text)
+    current_pain = detect_user_pain(current_emotion_data)
+    current_entry = {
+        "text": current_text,
+        "emotion": current_emotion_data,
+        "pain": current_pain
+    }
+    recent_msgs.append(current_entry)
+
+    # Take the most recent 'consecutive_count' messages
+    recent_msgs = recent_msgs[-consecutive_count:]
+
+    consecutive_negative = 0
+    negative_messages = []
+
+    for msg in recent_msgs:
+        text = msg.get("text", "").lower()
+        valence = msg.get("emotion", {}).get("vad", {}).get("valence", 0.0)
+        is_negative = valence < 0 or any(word in text for word in NEGATIVE_WORDS)
+
+        if is_negative:
+            consecutive_negative += 1
+            negative_messages.append(msg)
+        else:
+            consecutive_negative = 0
+            negative_messages = []
+
+    if consecutive_negative >= consecutive_count:
+        # Crisis mode triggered
+        personality = detect_personality(current_text)  # Or aggregate from recent msgs
+        return {
+            "crisis_mode": True,
+            "recent_messages": negative_messages,
+            "pain_levels": [msg.get("pain", 0.0) for msg in negative_messages],
+            "emotions": [msg.get("emotion") for msg in negative_messages],
+            "personality": personality
+        }
+
+    return {"crisis_mode": False}
+
+
+
+
+
+
 # if __name__ == "__main__":
 #     user_id = "user123"
 #     texts = "I want to die"
