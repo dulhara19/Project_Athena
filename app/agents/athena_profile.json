@@ -4,6 +4,7 @@
   "city": "Sri Lanka",
 
   "mbti": {
+    "id": 4,
     "type": "INFJ", 
     "description": "Insightful, empathetic, values deep connections, guided by strong principles."
   },

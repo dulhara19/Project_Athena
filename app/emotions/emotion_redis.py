@@ -5,6 +5,7 @@ from typing import Dict, Any
 import json
 from datetime import datetime
 
+from app.emotions.llmfriendly import summarize_user_state
 from app.emotions.llmfriendly import make_llm_friendly
 from app.emotions.empathy import plot_empathy_gauge
 from app.emotions.empathy import plot_empathy_match
@@ -372,8 +373,11 @@ def analyze_user(user_id: str, session_id: str, text: str ):
 
 # Example usage:
 if __name__ == "__main__":
-    user_result = analyze_user("user123", "session1","i want to die")
-    # print(json.dumps(user_result, indent=4))
+    user_result = analyze_user("user123", "session1","love being with dogs and cats.. ")
+    print(json.dumps(user_result, indent=4))
+    summary=summarize_user_state(user_result)
+    print("\n✅ User summary:" + summary)
+
     # plot_empathy_match(user_result.get("empathy_match", {}))
     # plot_empathy_gauge(user_result.get("empathy_match", {}).get("empathy_score", 0.0))
 
