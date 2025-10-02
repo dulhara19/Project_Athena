@@ -288,14 +288,11 @@ def analyze_user(user_id: str, session_id: str, text: str ):
        from app.emotions.llmfriendly import build_crisis_prompt
        from app.llmconnector import connector
        from app.emotions.stregex import extract_final_answer
-       from app.emotions.llmfriendly import make_llm_friendly
+    #    from app.emotions.llmfriendly import make_llm_friendly
        from app.emotions.llmfriendly import extract_final_answer_v2
        import re
        print("🛑crisis mode activated")
-       print("🛑🛑🛑🛑crisis data🛑🛑🛑")
-       x=make_llm_friendly(crisis)
-       print(x)
-       print("🛑🛑🛑🛑crisis data🛑🛑🛑")
+       
        prompt=build_crisis_prompt(crisis)
        response=connector(prompt)
        

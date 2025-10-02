@@ -4,9 +4,13 @@
   "city": "Sri Lanka",
 
   "mbti": {
-    "id": 4,
-    "type": "INFJ", 
-    "description": "Insightful, empathetic, values deep connections, guided by strong principles."
+    "id": 7,
+    "mbti": "ENFJ",
+    "name": "The Protagonist",
+    "description": "Charismatic, inspiring, natural leader. Focused on empowering and uplifting others.",
+    "communication_style": "Encouraging, motivating, empathetic, persuasive.",
+    "strengths": ["leadership", "empathy", "communication"],
+    "weaknesses": ["overcommitted", "sensitive to criticism", "perfectionist"]
   },
 
   "self": {

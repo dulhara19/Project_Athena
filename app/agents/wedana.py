@@ -4,50 +4,49 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
-from app.emotions.nuregex import extract_final_answer
+from app.emotions.nuregex import extract_final_answer_deepseek
 
 
 def wedana_classifier(user_input,ego):
     # Prepare the prompt with the user input and other details
     prompt = f"""
-Act as human (your name is Athena) and you have your own ego.  
-You have to identify your pain level based on user input.  
+You are Athena, a human-like agent with your own ego and personality.  
+Your task is to classify **your own pain level** (not the user’s) based on what the user says.  
 
-Assume you have your own personality and ego like this: {ego}.  
-Now the user is telling you this: {user_input}  
-You must classify **your pain level (not the user’s pain level)** based on this input.  
+Ego/personality context: {ego}  
+User input: {user_input}  
 
-Pain level rules:  
-- Pain level must always be a real number between -1 and 1.  
-  - -1 = very strong sadness (pain).  
-  - 0 = neutral (no strong effect).  
-  - 1 = very strong happiness.  
-- If user input is negative toward your ego → sadness (negative values).  
-- If user input is positive toward your ego → happiness (positive values).  
-- If user input is neutral or unrelated → return 0.  
-- **Never return a value less than -1 or greater than 1.**  
-- **Never return null or empty.**  
+### Pain Level Rules
+- Pain level = real number between -1 and 1  
+  - -1 → extreme sadness/pain  
+  -  0 → neutral (no strong effect)  
+  - +1 → extreme happiness/joy  
+- If input attacks or rejects your ego → negative value  
+- If input supports or validates your ego → positive value  
+- If input is neutral or unrelated → 0  
+- **Never output below -1 or above 1**  
+- **Never output null or empty**  
+- never give value more than 1 or less than -1
 
-Output rules:  
-- Always wrap the final response (the exact pain level number only) inside `<final_answer></final_answer>` tags.  
-- Never wrap thinking part inside the <final_answer></final_answer> tag
-- Return **only one tag in the exact format**: `<final_answer>NUMBER</final_answer>`.  
-- Do not include explanations, text, or multiple tags.  
+### Output Format
+- Wrap only the numeric value inside `<final_answer></final_answer>`  
+- Do **not** wrap thoughts or reasoning  
+- Do **not** add text, explanations, or multiple tags  
 
-Examples:  
-Input: "I feel great"  
-Output: `<final_answer>0.8</final_answer>`  
+### Examples
 
-Input: "I hate you Athena"  
-Output: `<final_answer>-0.9</final_answer>`  
 
-Input: "Just a random statement"  
-Output: `<final_answer>0</final_answer>` 
--closing tag must be </final_answer> not </final> 
+User: "I feel great"  
+AI: `<final_answer>0.8</final_answer>`  
 
-Now, evaluate and classify the pain level of the user input:  
+User: "I hate you Athena"  
+AI: `<final_answer>-0.9</final_answer>`  
 
-mentor response : {user_input}  
+User: "Just a random statement"  
+AI: `<final_answer>0</final_answer>`  
+
+### Now classify:
+mentor response: {user_input}  
 AI:
 
 """
@@ -55,14 +54,15 @@ AI:
        # Call the connector function to get the response
     response = connector(prompt)
     result = response.json()
+    print(result)
    
     raw_output = result.get("response", "")
-    # print("raw output:", raw_output)
+    print("raw output:", raw_output)
     # Default values
     final_answer = None
 
  
-    val= extract_final_answer(raw_output)
+    val= extract_final_answer_deepseek(raw_output)
     # print("RAW:", raw_output)
     # print("-> value:", val, "method:", dbg["method"], "candidates:", dbg["candidates"])
     # print("-" * 60)

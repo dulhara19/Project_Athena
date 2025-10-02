@@ -1,6 +1,6 @@
 import re
 
-def extract_final_answer(text: str) -> str:
+def extract_final_answer_str(text: str) -> str:
     """
     Extracts the content inside <final_answer>, <final>, or <answer> tags from LLM output.
     Returns the extracted string. If no tags found, returns the original text stripped.
