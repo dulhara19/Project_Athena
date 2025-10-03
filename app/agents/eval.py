@@ -86,6 +86,8 @@ def empathy_from_pain(
 
     raw_emp = (w_align * alignment + w_dir * dir_score + w_conf * conf) / total_w
     raw_emp = clamp01(raw_emp + soothe_bonus)
+    
+    
 
     return {
         "empathy": round(raw_emp, 3),
@@ -109,3 +111,8 @@ def plot_eval(athena_pain, user_pain):
     ax.axhline(0,color='gray',linewidth=0.5)
     ax.set_ylabel('pain (-1 sad -> +1 happy)')
     plt.show()
+
+
+import matplotlib.pyplot as plt
+
+# Example: calling the function
