@@ -137,6 +137,8 @@ TASK:
 3) Add humor, emojis, or metaphors when appropriate.
 4) Only output the final textual reply wrapped inside a single <final_answer>...</final_answer> tag.
 5) Do NOT output any numeric value, explanations, or multiple tags.
+6) If you cannot respond, apologize briefly.
+7) be funny if its suitable. 
 
 AI Response:
 """
