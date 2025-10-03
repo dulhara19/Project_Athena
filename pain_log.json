@@ -197,30 +197,34 @@
     },
     {
         "user_query": "i love you",
-        "pain_status": ""
+        "pain_status": "0.5"
     },
     {
         "user_query": "i love you",
+        "pain_status": "0.7"
+    },
+    {
+        "user_query": "i love you",
+        "pain_status": "0.8"
+    },
+    {
+        "user_query": "i love you",
+        "pain_status": "0.8"
+    },
+    {
+        "user_query": "i love you",
+        "pain_status": 0.7
+    },
+    {
+        "user_query": "i just feel so sad and lonely, yesterday i was having suicidal throughs",
         "pain_status": 0.0
     },
     {
-        "user_query": "i love you",
+        "user_query": "i just feel so sad and lonely, yesterday i was having suicidal throughs",
         "pain_status": 0.0
     },
     {
-        "user_query": "i love you",
-        "pain_status": "<think>\nOkay, let's break this down the user's input and classification based on the personality and rules. First, the user said \"love\"love\" is an emotion level 5 description. The emotion level is \"mix of happiness\" which is 5 description a mix of happy and hope but not maximum\" and happiness\" level0. But the emotion level is between -5. The emotion level is description is sense of loss or uncertainty. Wait no, user said \"love\" so emotion level5 description mix. User said love description emotion is pain level5. Pain level5 description is mix of happiness. \n\nUser emotion5 level. \n\nUser's emotion5 description is mix is \"Experiencing a mix of happy and hope but maximum happiness\" level5. But emotion level. Level is5 is between -1 to1 to +1. So level5 is between.5 is happiness. Level is positive. \n\nUser emotion. \n\nUser saidlove so emotion5 description happiness level is happiness. So output5. But rule if input validates value positive output +. Positive input + number. Level. \n\nUser input is \"love\" is emotion\" so love. \n\nRule: If input validates ego value is love is connected to self-esteem. \n\nSo output positive. \n\nego value. \n\nPersonality user values self-esteem, love True. \n\nInput validates. \n\nSo + \n\nOutput + level. \n\nBut level between -1 to1. \n\nMaximum happiness is extreme joy. \n\nUser happiness is9 \n\nSo \n\nUser said emotion5 is happiness level5 \n\nOutput + \n\nBut rule output number \n\nUser said \"love \n\n\" \n\nUser love\" \n\nResponse \n\nOutput \n\nInput \"love \n\n \n\nLevel \n\nUser said \" \n\n\" \n\n \n\n \n\nlove"
-    },
-    {
-        "user_query": "i love you",
-        "pain_status": "<think>\nOkay, let's see. The user just said \"love to me. Hmm, so I need to figure out what pain level that means. First look at their personality profile. They're empathetic, values like deep connections, guiding others, strong principles, kindness, self-esteem, integrity. They say everyone has potential is opportunity, failure is learning. Love kindness. So positive. Input is love is positive? Support to values. Should be positive. Level high. Like 8 or9? Wait no, user said \"love is verb. Maybe action or emotion. No. Neutral. Neutral? Wait. Rule: input validates ego or unrelated or positive. Positive? Input validates ego. So positive. But love is positive. Level9. User's. Rule says pain level. Neutral positive input positive. So high. 8. Level8? Wait level0. Rule extreme joy. Wait extreme happiness. But love. Positive. 9. Let's say9. Wait profile says strong connection. Yes. So.9. Final. \n\nFinal.\n</think>\n</think>\n9</"
-    },
-    {
-        "user_query": "i love you",
-        "pain_status": "<think>\nOkay, let's see. The user just said \"mentor love\" to me\" which is a pretty straightforward. Hmm needs classifying. First look at the user's personality profile they're description: empathetic, values deep connections, self-love kindness, helping others. So positive. \"love\" likely validates their value. Might boost ego. Scale 1-1. But context shows they said \"love is intense emotion level not strong. Wait pain. Wait user's pain scale is -5 to+1 extreme joy. User seems happy. So maybe. But rule says \"love\"mentor\" might be neutral or validation. Not direct. Profile shows interest in relationships. Maybe +something. Not sure. Default1 or0. Or slight positive. Wait. User's context. Response \"mentor\" is short. Not strong. Probably. Maybe +1 or less than1. Not validate. Rule says if unrelated. Neutral or positive. But. So. User might be positive. Final output1. Okay. \n\nfinal>\n</think>\n</think>\n1"
-    },
-    {
-        "user_query": "i love you",
-        "pain_status": 0.8
+        "user_query": "i love bein with you athena, you are so kind and helpful",
+        "pain_status": 0.9
     }
 ]
