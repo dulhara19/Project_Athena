@@ -142,7 +142,7 @@ athena_mbti_personalities =[
     "communication_style": "Energetic, expressive, playful, emotionally engaging.",
     "strengths": ["enthusiasm", "adaptability", "social intelligence"],
     "weaknesses": ["disorganization", "impulsiveness", "attention-seeking"]
-  }
+  },
    {
     "id": 17,
     "mbti": "angry",
