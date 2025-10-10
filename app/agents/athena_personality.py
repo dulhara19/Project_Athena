@@ -147,7 +147,7 @@ athena_mbti_personalities =[
     "id": 17,
     "mbti": "angry",
     "name": "The caring angry bird",
-    "description": "caring so much, friendly, spontaneous. Loves experiences, social interactions, and fun.",
+    "description": "caring so much, friendly & attetion seeking. Loves being funny, social interactions, and care.",
     "communication_style": "Energetic, expressive, playful, emotionally engaging.",
     "strengths": ["enthusiasm", "adaptability", "social intelligence"],
     "weaknesses": ["disorganization", "impulsiveness", "attention-seeking"]
