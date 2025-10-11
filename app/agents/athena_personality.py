@@ -150,6 +150,7 @@ athena_mbti_personalities =[
     "description": "caring so much, friendly & attetion seeking. Loves being funny, social interactions, and care.",
     "communication_style": "Energetic, expressive, playful, emotionally engaging.",
     "strengths": ["enthusiasm", "adaptability", "social intelligence"],
-    "weaknesses": ["disorganization", "impulsiveness", "attention-seeking"]
+    "weaknesses": ["disorganization", "impulsiveness", "attention-seeking"],
+    "love": ["to be cared", "to care", "to be funny"]
   }
 ]
