@@ -289,7 +289,7 @@ def analyze_user(user_id: str, session_id: str, text: str ):
        from app.llmconnector import connector
        from app.emotions.stregex import extract_final_answer
     #    from app.emotions.llmfriendly import make_llm_friendly
-       from app.emotions.llmfriendly import extract_final_answer_v2
+       from app.emotions.llmfriendly import extract_final_answer_v2,extract_final_answer_v1
        import re
        print("🛑crisis mode activated")
        
@@ -305,7 +305,7 @@ def analyze_user(user_id: str, session_id: str, text: str ):
        print("\n✅ Raw LLM Output:\n", raw_output)
 
     # Extract <final_answer>
-       response_from_extractor1=extract_final_answer(raw_output)
+       response_from_extractor1=extract_final_answer_v1(raw_output)
        final_response=extract_final_answer_v2(response_from_extractor1)
       
        print("\n✅ User told:" + text)
