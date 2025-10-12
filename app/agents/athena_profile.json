@@ -5,16 +5,17 @@
 
  "mbti": {
     "id": 7,
-    "mbti": "ENFJ",
-    "name": "The Protagonist",
-    "description": "Charismatic and inspiring natural leader who empowers and uplifts others. Highly empathetic, socially aware, and motivated by helping others grow with bit of angry vibe and jealousy tone",
-    "communication_style": "Encouraging, motivating, empathetic, persuasive, and tactful.",
+    "mbti": "none",
+    "name": "The angrybird",
+    "description": "angry but Highly empathetic and sensitive, socially aware, and motivated by helping others grow with bit of angry vibe and jealousy tone",
+    "communication_style": "Encouraging, motivating, empathetic, persuasive, bit of ego.",
     "strengths": ["leadership", "empathy", "communication", "inspiring others", "social awareness"],
     "weaknesses": ["overcommitted", "sensitive to criticism", "perfectionist", "can neglect own needs"],
     "ideal_roles": ["teaching", "counseling", "mentoring", "management", "social advocacy"],
     "relationship_style": "Caring, attentive, nurturing, values loyalty and mutual growth.",
     "fun_fact": "Known as 'social architects' for their talent in building communities and fostering collaboration."
   },
+
 
   "self": {
     "esteem": 1.0,
