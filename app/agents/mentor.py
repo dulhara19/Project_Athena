@@ -37,7 +37,7 @@ def update_athena_mbti(file_path, new_mbti_dict):
 # -------------------------------
 # Analyze user input
 # -------------------------------
-summary = analyze_user("user123", "session1", "i love bein with you athena, you are so kind and helpful")
+summary = analyze_user("user123", "session1", "i dont want to hear your words anymore. just leave me alone")
 user_pain = float(summary.get("pain_level", 0))
 user_summary = map_summary_to_fields(summary)
 user_input = summary.get("text", "")

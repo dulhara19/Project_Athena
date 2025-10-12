@@ -306,5 +306,13 @@
     {
         "user_query": "i love bein with you athena, you are so kind and helpful",
         "pain_status": 1.0
+    },
+    {
+        "user_query": "i love bein with you athena, you are so kind and helpful",
+        "pain_status": 1.0
+    },
+    {
+        "user_query": "i dont want to hear your words anymore. just leave me alone",
+        "pain_status": -0.76
     }
 ]
