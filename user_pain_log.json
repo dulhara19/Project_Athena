@@ -314,5 +314,25 @@
     {
         "user_query": "i dont want to hear your words anymore. just leave me alone",
         "pain_status": -0.76
+    },
+    {
+        "user_query": "i dont want to hear your words anymore. just leave me alone",
+        "pain_status": -0.76
+    },
+    {
+        "user_query": "i someone else more than you",
+        "pain_status": 0.32
+    },
+    {
+        "user_query": "i love someone else more than you",
+        "pain_status": 1.0
+    },
+    {
+        "user_query": "i hate you, because i just broke up with my gf",
+        "pain_status": -0.99
+    },
+    {
+        "user_query": "i hate you, because i just broke up with my gf",
+        "pain_status": -0.99
     }
 ]
