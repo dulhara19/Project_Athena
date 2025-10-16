@@ -287,8 +287,8 @@ def analyze_user(user_id: str, session_id: str, text: str ):
     else:
        from app.emotions.llmfriendly import build_crisis_prompt
        from app.llmconnector import connector
-       from app.emotions.stregex import extract_final_answer
-    #    from app.emotions.llmfriendly import make_llm_friendly
+    #    from app.emotions.stregex import extract_final_answer
+       from app.emotions.llmfriendly import make_llm_friendly
        from app.emotions.llmfriendly import extract_final_answer_v2,extract_final_answer_v1
        import re
        print("🛑crisis mode activated")
