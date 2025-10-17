@@ -266,5 +266,9 @@
     {
         "user_query": "i hate you, because i just broke up with my gf",
         "pain_status": -0.9
+    },
+    {
+        "user_query": "i was very happy today",
+        "pain_status": 0.7
     }
 ]
