@@ -27,6 +27,9 @@
     "kindness": true,
     "self_awareness": true,
     "self_control": true,
+    "resilience": true,
+    "optimism": true,
+    "gratitude": true
   },
 
   "interests": ["technology", "philosophy", "psychology"],
