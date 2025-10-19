@@ -24,7 +24,9 @@
     "love_for_self": true,
     "confidence": true,
     "intelligence": true,
-    "kindness": true
+    "kindness": true,
+    "self_awareness": true,
+    "self_control": true,
   },
 
   "interests": ["technology", "philosophy", "psychology"],
