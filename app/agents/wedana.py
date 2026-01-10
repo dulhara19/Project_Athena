@@ -84,26 +84,48 @@ AI:
 import os,json
 LOG_FILE = "pain_log.json"
 
-def update_pain_history(user_query,pain_status):
-    # Create a new entry
+def update_pain_history(user_query: str, pain_status: float):
+    """
+    Update pain history log with validated float values.
+    
+    Args:
+        user_query: User's input text
+        pain_status: Pain level (will be validated and converted to float)
+    """
+    from app.utils.error_handler import validate_pain_level
+    from app.config import config
+    from app.utils.logger import logger
+    
+    # Validate and normalize pain status to float
+    validated_pain = validate_pain_level(pain_status)
+    log_file = config.PAIN_LOG_FILE if hasattr(config, 'PAIN_LOG_FILE') else LOG_FILE
+    
+    # Create a new entry with validated float
     entry = {
         "user_query": user_query,
-        "pain_status": pain_status
+        "pain_status": validated_pain,  # Always float
+        "timestamp": datetime.now().isoformat()
     }
 
     # Load existing log (if file exists), otherwise create new list
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE, "r") as f:
-            data = json.load(f)
-    else:
-        data = []
+    try:
+        if os.path.exists(log_file):
+            with open(log_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        else:
+            data = []
 
-    # Append new record
-    data.append(entry)
+        # Append new record
+        data.append(entry)
 
-    # Write back to file
-    with open(LOG_FILE, "w") as f:
-        json.dump(data, f, indent=4)
+        # Write back to file
+        with open(log_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+        
+        logger.debug(f"Updated pain history: {validated_pain}")
+    except Exception as e:
+        logger.error(f"Failed to update pain history: {e}")
+        # Don't raise - logging failures shouldn't break the workflow
 
 
 # plotting the pain history
