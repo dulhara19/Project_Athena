@@ -19,19 +19,38 @@ from app.emotions.emotionplotter import plot_pain_history_fixed
 # 1️⃣ Redis Setup
 # -----------------------------
 # Connect to local Redis for short-term memory
-r = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+from app.config import config
+from app.utils.logger import logger
+from app.utils.error_handler import RedisConnectionError, handle_error
+
+try:
+    r = redis.Redis(
+        host=config.REDIS_HOST, 
+        port=config.REDIS_PORT, 
+        db=config.REDIS_DB, 
+        decode_responses=True
+    )
+    # Test connection
+    r.ping()
+    logger.info(f"Connected to Redis at {config.REDIS_HOST}:{config.REDIS_PORT}")
+except Exception as e:
+    logger.error(f"Failed to connect to Redis: {e}")
+    raise RedisConnectionError(f"Cannot connect to Redis: {e}")
 
 # -----------------------------
 # 2️⃣ Load GoEmotions Pipeline
 # -----------------------------
-print("Loading GoEmotions model...")
-classifier = pipeline(
-    "text-classification",
-    model="joeddav/distilbert-base-uncased-go-emotions-student",
-    top_k=None
-)
-print("Model loaded.")
-print("Device set to use cpu")
+try:
+    logger.info("Loading GoEmotions model...")
+    classifier = pipeline(
+        "text-classification",
+        model=config.EMOTION_MODEL,
+        top_k=None
+    )
+    logger.info("Emotion model loaded successfully")
+except Exception as e:
+    logger.error(f"Failed to load emotion model: {e}")
+    raise EmotionAnalysisError(f"Cannot load emotion model: {e}")
 
 # -----------------------------
 # 3️⃣ VAD Map for emotions
@@ -67,7 +86,21 @@ def analyze_emotion_text(text: str) -> Dict[str, Any]:
     Detect emotions from user text, calculate VAD and intensity.
     Handles outputs from HF pipeline safely.
     """
-    out = classifier(text, top_k=None)
+    if not text or not isinstance(text, str):
+        logger.warning("Empty or invalid text provided to analyze_emotion_text")
+        return {
+            "emotions": {},
+            "vad": {"valence": 0.0, "arousal": 0.0, "dominance": 0.0},
+            "intensity": 0.0,
+            "confidence": 0.0
+        }
+    
+    try:
+        out = classifier(text, top_k=None)
+    except Exception as e:
+        logger.error(f"Emotion analysis failed: {e}")
+        handle_error(e, {"function": "analyze_emotion_text", "text": text[:50]})
+        raise EmotionAnalysisError(f"Failed to analyze emotions: {e}")
 
     # Handle flat list of dicts
     if isinstance(out, list) and all(isinstance(item, dict) for item in out):
@@ -281,38 +314,33 @@ def analyze_user(user_id: str, session_id: str, text: str ):
 
     # check crisis mode
     crisis = check_crisis_mode_trigger(user_id, text, consecutive_count=3)
-    # Alert if crisis mode activated
-    if crisis.get("crisis_mode") == False:
-       print("no harm✅")
-    else:
+    crisis_response = None
+    
+    # Handle crisis mode if activated
+    if crisis.get("crisis_mode") == True:
        from app.emotions.llmfriendly import build_crisis_prompt
        from app.llmconnector import connector
-    #    from app.emotions.stregex import extract_final_answer
-       from app.emotions.llmfriendly import make_llm_friendly
-       from app.emotions.llmfriendly import extract_final_answer_v2,extract_final_answer_v1
-       import re
-       print("🛑crisis mode activated")
+       from app.emotions.llmfriendly import extract_final_answer_v2, extract_final_answer_v1
+       from app.utils.logger import logger
        
-       prompt=build_crisis_prompt(crisis)
-       response=connector(prompt)
+       logger.warning(f"🛑 Crisis mode activated for user {user_id}")
        
-    # Parse and extract classification
-       result = response.json()
-       raw_output = result.get("response", "")
+       try:
+           prompt = build_crisis_prompt(crisis)
+           response = connector(prompt)
+           
+           # Parse and extract classification
+           result = response.json()
+           raw_output = result.get("response", "")
 
-    # debugging---
-    # Print raw output for debugging
-       print("\n✅ Raw LLM Output:\n", raw_output)
-
-    # Extract <final_answer>
-       response_from_extractor1=extract_final_answer_v1(raw_output)
-       final_response=extract_final_answer_v2(response_from_extractor1)
-      
-       print("\n✅ User told:" + text)
-        # print("\n✅ answer :")
-       print(final_response)
-    
-       return final_response
+           # Extract <final_answer>
+           response_from_extractor1 = extract_final_answer_v1(raw_output)
+           crisis_response = extract_final_answer_v2(response_from_extractor1)
+           
+           logger.info(f"Crisis response generated for user {user_id}")
+       except Exception as e:
+           logger.error(f"Failed to generate crisis response: {e}")
+           crisis_response = "I'm here to help. Please reach out to someone you trust or contact a crisis helpline."
       
        
 # ------------------------------------------------------------------
@@ -333,7 +361,7 @@ def analyze_user(user_id: str, session_id: str, text: str ):
     recent = [m.get("text","") for m in get_recent_emotions(user_id, n=6)]
     empathy_match_result = empathy_match(user_id=user_id, ego=ego, emotion_analysis=emotion_data, recent_texts=recent, strategy="mirror")
 
-    return {
+    result = {
         "user_id": user_id,
         "session_id": session_id,
         "text": text,
@@ -343,8 +371,13 @@ def analyze_user(user_id: str, session_id: str, text: str ):
         "mbti": mbti,
         "crisis_mode": crisis,
         "empathy_match": empathy_match_result
-
     }
+    
+    # Add crisis response if available (but continue normal flow)
+    if crisis_response:
+        result["crisis_response"] = crisis_response
+    
+    return result
 
 
 # if __name__ == "__main__":
