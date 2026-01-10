@@ -1,7 +1,9 @@
 redis
 fastapi
-uvicorn
+uvicorn[standard]
 pydantic
 python-dotenv
 transformers
 torch
+websockets
+python-multipart
