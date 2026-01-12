@@ -21,14 +21,31 @@ mbti_compatibility = {
     "ESFP": "ISTJ"
 }
 def pick_new_personality_by_user_mbti(user_mbti, personalities_list):
+    """
+    Pick new personality based on user MBTI compatibility.
+    
+    Args:
+        user_mbti: User's MBTI type (string)
+        personalities_list: List of personality dictionaries
+        
+    Returns:
+        Personality dictionary or None
+    """
+    if not user_mbti or not isinstance(user_mbti, str):
+        return None
+    
     # Get suggested Athena MBTI from the mapping
-    suggested_mbti = mbti_compatibility.get(user_mbti, None)
+    suggested_mbti = mbti_compatibility.get(user_mbti.upper(), None)
     if not suggested_mbti:
         return None  # fallback: no change
 
     # Find the personality in personalities_list
+    # Handle both list and single dict cases
+    if isinstance(personalities_list, dict):
+        personalities_list = [personalities_list]
+    
     for p in personalities_list:
-        if p["mbti"] == suggested_mbti:
+        if isinstance(p, dict) and p.get("mbti") == suggested_mbti:
             return p
     return None  # fallback if not found
 
