@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena System - Architecture Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: #404040;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #2563eb;
+        }
+
+        .theme-toggle {
+            padding: 8px 16px;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .theme-toggle:hover {
+            background: #059669;
+        }
+
+        .diagram-section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .diagram-section h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: var(--accent-blue);
+            border-bottom: 3px solid var(--accent-blue);
+            padding-bottom: 10px;
+        }
+
+        .diagram-section h3 {
+            font-size: 1.3em;
+            margin: 20px 0 10px 0;
+            color: var(--text-primary);
+        }
+
+        .diagram-description {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--bg-primary);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 5px;
+        }
+
+        .diagram-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="dark"] .diagram-container {
+            background: #2d2d2d;
+        }
+
+        .file-reference {
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--bg-primary);
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: var(--accent-purple);
+            border: 1px solid var(--border-color);
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .tech-item {
+            padding: 15px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tech-item h4 {
+            color: var(--accent-blue);
+            margin-bottom: 8px;
+        }
+
+        .tech-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tech-item li {
+            padding: 5px 0;
+            color: var(--text-secondary);
+        }
+
+        .tech-item li:before {
+            content: "▸ ";
+            color: var(--accent-green);
+        }
+
+        @media print {
+            .controls {
+                display: none;
+            }
+            .diagram-section {
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            .nav-menu {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏛️ Athena System Architecture</h1>
+            <p>AI Agent with Enhanced Ego System and Empathy Metrics - Complete System Architecture Documentation</p>
+        </header>
+
+        <div class="controls">
+            <div class="nav-menu">
+                <button class="nav-btn" onclick="scrollToSection('overview')">System Overview</button>
+                <button class="nav-btn" onclick="scrollToSection('workflow')">Workflow</button>
+                <button class="nav-btn" onclick="scrollToSection('ego')">Ego System</button>
+                <button class="nav-btn" onclick="scrollToSection('dataflow')">Data Flow</button>
+                <button class="nav-btn" onclick="scrollToSection('communication')">Communication</button>
+                <button class="nav-btn" onclick="scrollToSection('dependencies')">Dependencies</button>
+                <button class="nav-btn" onclick="scrollToSection('techstack')">Tech Stack</button>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">🌓 Toggle Theme</button>
+        </div>
+
+        <!-- System Architecture Overview -->
+        <section id="overview" class="diagram-section">
+            <h2>1. System Architecture Overview</h2>
+            <div class="diagram-description">
+                <p><strong>High-level view of the Athena system architecture</strong></p>
+                <p>Shows the main components: React frontend, FastAPI backend, external services (Ollama LLM, Redis), and core modules (Emotion Analysis, Ego System, MBTI Detection, etc.).</p>
+            </div>
+            <div class="diagram-container">
+                <div class="mermaid">
+flowchart TB
+    subgraph Frontend["Frontend Layer (React + TypeScript)"]
+        UI[ChatInterface]
+        WV[WorkflowVisualizer]
+        ED[EmotionDisplay]
+        ESD[EgoSystemDisplay]
+        EM[EmpathyMetrics]
+        PH[PainHistory]
+        MBTI[MBTIDisplay]
+        CA[CrisisAlert]
+    end
+
+    subgraph Backend["Backend Layer (FastAPI)"]
+        API[FastAPI App<br/>app/api/main.py]
+        WS[WebSocket Server<br/>app/api/websocket.py]
+        WO[Workflow Orchestrator<br/>app/api/workflow.py]
+        
+        subgraph Routes["API Routes"]
+            CR[Chat Routes<br/>app/api/routes/chat.py]
+            MR[Metrics Routes<br/>app/api/routes/metrics.py]
+            ER[Ego Routes<br/>app/api/routes/ego.py]
+        end
+    end
+
+    subgraph CoreModules["Core Processing Modules"]
+        EA[Emotion Analysis<br/>app/emotions/emotion_redis.py]
+        MBTI_Det[MBTI Detection<br/>app/emotions/mbti.py]
+        EgoSys[Enhanced Ego System<br/>app/agents/enhanced_ego_system.py]
+        RespGen[Response Generator<br/>app/agents/combinator.py]
+        PainCalc[Pain Calculator<br/>app/agents/wedana.py]
+        Empathy[Empathy Metrics<br/>app/agents/eval.py]
+    end
+
+    subgraph ExternalServices["External Services"]
+        Ollama[Ollama LLM<br/>localhost:11434<br/>Model: qwen3:8b]
+        Redis[Redis Cache<br/>localhost:6379<br/>Short-term Memory]
+        HFModel[HuggingFace Model<br/>GoEmotions<br/>Emotion Detection]
+    end
+
+    subgraph Storage["Data Storage"]
+        Profile[Athena Profile<br/>app/agents/athena_profile.json]
+        PainLog[Pain History<br/>pain_log.json]
+        UserData[User Data<br/>Redis + JSON Files]
+    end
+
+    UI -->|HTTP/WebSocket| API
+    WV -->|WebSocket| WS
+    ED -->|HTTP| API
+    ESD -->|HTTP| API
+    EM -->|HTTP| API
+
+    API --> WO
+    API --> Routes
+    WS --> WO
+    CR --> WO
+    MR --> EgoSys
+    ER --> EgoSys
+
+    WO --> EA
+    WO --> MBTI_Det
+    WO --> EgoSys
+    WO --> RespGen
+    WO --> PainCalc
+    WO --> Empathy
+
+    EA --> HFModel
+    EA --> Redis
+    MBTI_Det --> Redis
+    RespGen --> Ollama
+    PainCalc --> Ollama
+    EgoSys --> Ollama
+
+    WO --> Storage
+    EA --> Storage
+    MBTI_Det --> Storage
+
+    style Frontend fill:#3b82f6,color:#fff
+    style Backend fill:#10b981,color:#fff
+    style CoreModules fill:#8b5cf6,color:#fff
+    style ExternalServices fill:#f59e0b,color:#fff
+    style Storage fill:#ef4444,color:#fff
+                </div>
+            </div>
+            <div class="file-reference">
+                <strong>Key Files:</strong> app/api/main.py, app/api/workflow.py, frontend/src/App.tsx
+            </div>
+        </section>
+
+        <!-- Complete Workflow (9 Steps) -->
+        <section id="workflow" class="diagram-section">
+            <h2>2. Complete Workflow (9 Steps)</h2>
+            <div class="diagram-description">
+                <p><strong>Detailed step-by-step workflow from user input to response</strong></p>
+                <p>Shows the complete 9-step process that occurs for each user interaction, including emotion analysis, pain calculation, ego impact, empathy metrics, response generation, and crisis detection.</p>
+            </div>
+            <div class="diagram-container">
+                <div class="mermaid">
+flowchart TD
+    Start([User Input]) --> Step1[Step 1: Emotion Analysis<br/>analyze_user<br/>GoEmotions Model<br/>VAD Calculation]
+    
+    Step1 --> Step2[Step 2: User Pain Calculation<br/>detect_user_pain<br/>Valence × Intensity<br/>Range: -1 to +1]
+    
+    Step2 --> Step3[Step 3: MBTI Detection<br/>detect_mbti_for_user<br/>Regex Pattern Matching<br/>Personality Inference]
+    
+    Step3 --> Step4[Step 4: Ego Impact Analysis<br/>EnhancedEgoSystem<br/>process_user_input<br/>Dimension Impact Calculation]
+    
+    Step4 --> Step5[Step 5: Athena Pain Calculation<br/>HybridEgoPainCalculator<br/>Rule-based + LLM<br/>Defense Mechanisms]
+    
+    Step5 --> Step6[Step 6: Empathy Metrics<br/>empathy_from_pain<br/>Alignment Calculation<br/>Direction Matching]
+    
+    Step6 --> Step7[Step 7: Response Generation<br/>generate_final_response<br/>LLM with Context<br/>Empathetic Response]
+    
+    Step7 --> Step8[Step 8: Personality Adaptation<br/>pick_new_personality_by_user_mbti<br/>MBTI Compatibility Check<br/>Update Profile if Needed]
+    
+    Step8 --> Step9[Step 9: Crisis Check<br/>check_crisis_mode_trigger<br/>Negative Word Detection<br/>Crisis Response if Needed]
+    
+    Step9 --> End([Final Response + Metrics])
+    
+    Step1 -.->|Store in Redis| RedisStore[(Redis Storage)]
+    Step2 -.->|Log| PainLog[(Pain History)]
+    Step4 -.->|Update| EgoState[(Ego State)]
+    Step8 -.->|Update| ProfileStore[(Athena Profile)]
+    
+    Step9 -->|Crisis Detected| CrisisResp[Crisis Response<br/>Specialized Prompt<br/>Safety Resources]
+    CrisisResp --> End
+
+    style Start fill:#3b82f6,color:#fff
+    style End fill:#10b981,color:#fff
+    style Step1 fill:#8b5cf6,color:#fff
+    style Step2 fill:#8b5cf6,color:#fff
+    style Step3 fill:#8b5cf6,color:#fff
+    style Step4 fill:#f59e0b,color:#fff
+    style Step5 fill:#f59e0b,color:#fff
+    style Step6 fill:#8b5cf6,color:#fff
+    style Step7 fill:#10b981,color:#fff
+    style Step8 fill:#8b5cf6,color:#fff
+    style Step9 fill:#ef4444,color:#fff
+    style CrisisResp fill:#ef4444,color:#fff
+    style RedisStore fill:#6366f1,color:#fff
+    style PainLog fill:#6366f1,color:#fff
+    style EgoState fill:#6366f1,color:#fff
+    style ProfileStore fill:#6366f1,color:#fff
+                </div>
+            </div>
+            <div class="file-reference">
+                <strong>Main File:</strong> app/api/workflow.py - WorkflowOrchestrator.process_user_interaction()
+            </div>
+        </section>
+
+        <!-- Ego System Architecture -->
+        <section id="ego" class="diagram-section">
+            <h2>3. Ego System Internal Architecture</h2>
+            <div class="diagram-description">
+                <p><strong>Detailed structure of the Enhanced Ego System</strong></p>
+                <p>Shows the 6 ego dimensions, impact calculator, hybrid pain calculator (combining rule-based and LLM approaches), defense mechanisms, evolution tracking, and metrics framework.</p>
+            </div>
+            <div class="diagram-container">
+                <div class="mermaid">
+flowchart TB
+    Input[User Input] --> EIS[EnhancedEgoSystem<br/>app/agents/enhanced_ego_system.py]
+    
+    EIS --> EIC[EgoImpactCalculator<br/>app/agents/ego_impact.py<br/>Keyword Pattern Matching<br/>Dimension Impact Detection]
+    
+    EIS --> HEPC[HybridEgoPainCalculator<br/>app/agents/hybrid_ego_pain.py]
+    
+    subgraph EgoDims["EgoDimensions (6 Dimensions)"]
+        ID[Identity<br/>self_esteem<br/>self_concept_clarity<br/>authenticity]
+        COMP[Competence<br/>intelligence_self_perception<br/>capability_confidence<br/>achievement_pride]
+        SOC[Social<br/>belonging_need<br/>recognition_need<br/>love_need]
+        VAL[Values<br/>value_integrity<br/>moral_standing<br/>purpose_alignment]
+        REL[Relationships<br/>attachment_security<br/>trust_level<br/>intimacy_comfort]
+        INT[Interests<br/>interest_validation<br/>hobby_importance<br/>passion_intensity]
+    end
+    
+    EIC --> EgoDims
+    HEPC --> EgoDims
+    
+    HEPC --> RuleBased[Rule-Based Calculation<br/>60% Weight<br/>Keyword Matching<br/>Vulnerability Weights]
+    HEPC --> LLMBased[LLM-Based Calculation<br/>40% Weight<br/>wedana_classifier<br/>Semantic Understanding]
+    
+    RuleBased --> Aggregate[Aggregate Pain Score<br/>Weighted Combination<br/>Confidence Scoring]
+    LLMBased --> Aggregate
+    
+    Aggregate --> EDM[EgoDefenseMechanisms<br/>app/agents/ego_defense.py]
+    
+    subgraph DefenseLevels["Defense Levels"]
+        Mature[Mature Defenses<br/>Ego Strength > 0.7<br/>Humor, Sublimation<br/>Anticipation]
+        Neurotic[Neurotic Defenses<br/>0.4 < Strength ≤ 0.7<br/>Rationalization<br/>Displacement]
+        Primitive[Primitive Defenses<br/>Strength ≤ 0.4<br/>Denial, Projection<br/>Repression]
+    end
+    
+    EDM --> DefenseLevels
+    DefenseLevels --> ModifiedPain[Modified Pain<br/>After Defense]
+    
+    ModifiedPain --> Evo[EgoEvolution<br/>app/agents/ego_evolution.py<br/>Update Dimensions<br/>Track History<br/>Consistency Scoring]
+    
+    Evo --> EgoDims
+    Evo --> Metrics[EgoMetrics<br/>app/agents/ego_metrics.py<br/>Comprehensive Metrics<br/>Research Export]
+    
+    Metrics --> Output[Final Ego Analysis<br/>Pain, Dimensions, Metrics<br/>Evolution Trend]
+    
+    style EIS fill:#3b82f6,color:#fff
+    style EIC fill:#10b981,color:#fff
+    style HEPC fill:#f59e0b,color:#fff
+    style EgoDims fill:#8b5cf6,color:#fff
+    style RuleBased fill:#10b981,color:#fff
+    style LLMBased fill:#f59e0b,color:#fff
+    style EDM fill:#ef4444,color:#fff
+    style DefenseLevels fill:#ef4444,color:#fff
+    style Evo fill:#8b5cf6,color:#fff
+    style Metrics fill:#10b981,color:#fff
+                </div>
+            </div>
+            <div class="file-reference">
+                <strong>Key Files:</strong> app/agents/enhanced_ego_system.py, app/agents/ego_structure.py, app/agents/hybrid_ego_pain.py
+            </div>
+        </section>
+
+        <!-- Data Flow Diagram -->
+        <section id="dataflow" class="diagram-section">
+            <h2>4. Data Flow Diagram</h2>
+            <div class="diagram-description">
+                <p><strong>How data flows through the system</strong></p>
+                <p>Shows the complete data journey from user input through analysis, processing, storage, and response generation, including Redis caching, file storage, and WebSocket updates.</p>
+            </div>
+            <div class="diagram-container">
+                <div class="mermaid">
+flowchart LR
+    User[User Input<br/>Text Message] --> API[FastAPI Endpoint<br/>POST /api/v1/chat]
+    
+    API --> Workflow[Workflow Orchestrator<br/>Generate Workflow ID]
+    
+    Workflow -->|Step 1| Emotion[Emotion Analysis<br/>GoEmotions Model<br/>VAD Scores]
+    Emotion --> Redis1[(Redis<br/>Store Emotion Data<br/>user:userId:emotions)]
+    
+    Workflow -->|Step 2| UserPain[User Pain<br/>Valence × Intensity<br/>Range: -1 to +1]
+    UserPain --> Redis1
+    
+    Workflow -->|Step 3| MBTI[MBTI Detection<br/>Pattern Matching<br/>Personality Type]
+    MBTI --> Redis1
+    
+    Workflow -->|Step 4| EgoImpact[Ego Impact<br/>Dimension Analysis<br/>6 Dimensions]
+    EgoImpact --> EgoState[(Ego State<br/>In-Memory<br/>Updated Per Interaction)]
+    
+    Workflow -->|Step 5| AthenaPain[Athena Pain<br/>Hybrid Calculation<br/>Rule + LLM]
+    AthenaPain --> PainFile[(Pain Log<br/>pain_log.json<br/>Historical Data)]
+    
+    Workflow -->|Step 6| Empathy[Empathy Metrics<br/>Alignment Score<br/>Direction Match]
+    
+    Workflow -->|Step 7| Response[Response Generation<br/>LLM Call<br/>Context-Aware]
+    Response --> ProfileFile[(Athena Profile<br/>athena_profile.json<br/>Personality Data)]
+    
+    Workflow -->|Step 8| Personality[Personality Adaptation<br/>MBTI Compatibility<br/>Update if Needed]
+    Personality --> ProfileFile
+    
+    Workflow -->|Step 9| Crisis[Crisis Check<br/>Negative Word Detection<br/>Crisis Response]
+    
+    Workflow --> Aggregate[Aggregate Results<br/>Combine All Data]
+    Aggregate --> WebSocket[WebSocket Update<br/>Real-time Progress]
+    Aggregate --> HTTPResp[HTTP Response<br/>Complete Result]
+    
+    WebSocket --> Frontend[Frontend<br/>React Components<br/>Live Visualization]
+    HTTPResp --> Frontend
+    
+    Frontend --> Display[User Interface<br/>Chat, Visualizations<br/>Metrics Dashboard]
+
+    style User fill:#3b82f6,color:#fff
+    style API fill:#10b981,color:#fff
+    style Workflow fill:#8b5cf6,color:#fff
+    style Redis1 fill:#f59e0b,color:#fff
+    style EgoState fill:#8b5cf6,color:#fff
+    style PainFile fill:#6366f1,color:#fff
+    style ProfileFile fill:#6366f1,color:#fff
+    style WebSocket fill:#10b981,color:#fff
+    style Frontend fill:#3b82f6,color:#fff
+    style Display fill:#10b981,color:#fff
+                </div>
+            </div>
+            <div class="file-reference">
+                <strong>Storage Files:</strong> Redis (app/emotions/emotion_redis.py), pain_log.json (app/agents/wedana.py), athena_profile.json (app/agents/athena_profile.json)
+            </div>
+        </section>
+
+        <!-- Frontend-Backend Communication -->
+        <section id="communication" class="diagram-section">
+            <h2>5. Frontend-Backend Communication</h2>
+            <div class="diagram-description">
+                <p><strong>WebSocket and API interaction patterns</strong></p>
+                <p>Shows how the React frontend communicates with the FastAPI backend using both HTTP REST API and WebSocket for real-time updates, including the workflow progress tracking system.</p>
+            </div>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant ChatUI as ChatInterface
+    participant WorkflowCtx as WorkflowContext
+    participant WebSocket as WebSocket Client
+    participant FastAPI as FastAPI Backend
+    participant WSManager as WebSocket Manager
+    participant Orchestrator as Workflow Orchestrator
+    participant EgoSystem as Ego System
+    participant LLM as Ollama LLM
+
+    User->>ChatUI: Type Message & Submit
+    ChatUI->>WorkflowCtx: sendMessage(userInput)
+    WorkflowCtx->>FastAPI: POST /api/v1/chat/stream
+    FastAPI-->>WorkflowCtx: workflow_id, websocket_url
+    
+    WorkflowCtx->>WebSocket: Connect to /ws/{workflow_id}
+    WebSocket->>WSManager: WebSocket Connection
+    WSManager-->>WebSocket: Connection Established
+    
+    FastAPI->>Orchestrator: Start process_user_interaction()
+    
+    Note over Orchestrator: Step 1: Emotion Analysis
+    Orchestrator->>EgoSystem: Process user input
+    Orchestrator->>WSManager: Send progress (step 1)
+    WSManager->>WebSocket: workflow_progress event
+    WebSocket->>WorkflowCtx: Update state
+    WorkflowCtx->>ChatUI: Update UI (Step 1 complete)
+    
+    Note over Orchestrator: Step 2-9: Continue Processing
+    loop For each step (2-9)
+        Orchestrator->>Orchestrator: Execute step
+        Orchestrator->>WSManager: Send progress update
+        WSManager->>WebSocket: workflow_progress event
+        WebSocket->>WorkflowCtx: Update state
+        WorkflowCtx->>ChatUI: Update visualization
+    end
+    
+    Note over Orchestrator: Step 7: Response Generation
+    Orchestrator->>LLM: Generate response
+    LLM-->>Orchestrator: Response text
+    
+    Orchestrator->>WSManager: Send workflow_complete
+    WSManager->>WebSocket: workflow_complete event
+    WebSocket->>WorkflowCtx: Final result
+    WorkflowCtx->>ChatUI: Display response + metrics
+    ChatUI->>User: Show Athena's response
+                </div>
+            </div>
+            <div class="file-reference">
+                <strong>Key Files:</strong> frontend/src/context/WorkflowContext.tsx, app/api/websocket.py, app/api/workflow.py
+            </div>
+        </section>
+
+        <!-- Component Dependencies -->
+        <section id="dependencies" class="diagram-section">
+            <h2>6. Component Dependencies</h2>
+            <div class="diagram-description">
+                <p><strong>Module relationships and dependencies</strong></p>
+                <p>Shows how different modules depend on each other, including imports, function calls, and data flow between components.</p>
+            </div>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    subgraph FrontendModules["Frontend Modules"]
+        App[App.tsx]
+        ChatInt[ChatInterface.tsx]
+        WorkflowViz[WorkflowVisualizer.tsx]
+        WorkflowCtx[WorkflowContext.tsx]
+        WebSocketHook[useWebSocket.ts]
+        APIService[api.ts]
+    end
+
+    subgraph BackendModules["Backend Modules"]
+        MainAPI[main.py<br/>FastAPI App]
+        Workflow[workflow.py<br/>Orchestrator]
+        WebSocketAPI[websocket.py<br/>Connection Manager]
+        ChatRoute[routes/chat.py]
+        MetricsRoute[routes/metrics.py]
+        EgoRoute[routes/ego.py]
+    end
+
+    subgraph CoreAgents["Agent Modules"]
+        EnhancedEgo[enhanced_ego_system.py]
+        EgoStructure[ego_structure.py]
+        EgoImpact[ego_impact.py]
+        HybridPain[hybrid_ego_pain.py]
+        EgoDefense[ego_defense.py]
+        EgoEvolution[ego_evolution.py]
+        EgoMetrics[ego_metrics.py]
+        Wedana[wedana.py<br/>Pain Classifier]
+        Combinator[combinator.py<br/>Response Generator]
+        Eval[eval.py<br/>Empathy Metrics]
+    end
+
+    subgraph EmotionModules["Emotion Modules"]
+        EmotionRedis[emotion_redis.py<br/>Main Analyzer]
+        MBTI[mbti.py<br/>Personality Detection]
+        Empathy[empathy.py<br/>Empathy Calculation]
+    end
+
+    subgraph Infrastructure["Infrastructure"]
+        Config[config.py<br/>Configuration]
+        Logger[utils/logger.py]
+        ErrorHandler[utils/error_handler.py]
+        LLMConnector[llmconnector.py<br/>Ollama Client]
+    end
+
+    App --> ChatInt
+    App --> WorkflowViz
+    ChatInt --> WorkflowCtx
+    WorkflowViz --> WorkflowCtx
+    WorkflowCtx --> WebSocketHook
+    WorkflowCtx --> APIService
+    APIService --> MainAPI
+
+    MainAPI --> ChatRoute
+    MainAPI --> MetricsRoute
+    MainAPI --> EgoRoute
+    MainAPI --> WebSocketAPI
+    ChatRoute --> Workflow
+    MetricsRoute --> EnhancedEgo
+    EgoRoute --> EnhancedEgo
+
+    Workflow --> EnhancedEgo
+    Workflow --> EmotionRedis
+    Workflow --> Wedana
+    Workflow --> Combinator
+    Workflow --> Eval
+
+    EnhancedEgo --> EgoStructure
+    EnhancedEgo --> EgoImpact
+    EnhancedEgo --> HybridPain
+    EnhancedEgo --> EgoDefense
+    EnhancedEgo --> EgoEvolution
+    EnhancedEgo --> EgoMetrics
+
+    HybridPain --> EgoImpact
+    HybridPain --> Wedana
+    EgoImpact --> EgoStructure
+    EgoDefense --> EgoStructure
+    EgoEvolution --> EgoStructure
+    EgoMetrics --> EgoStructure
+    EgoMetrics --> EgoEvolution
+    EgoMetrics --> EgoDefense
+
+    EmotionRedis --> MBTI
+    EmotionRedis --> Empathy
+    Wedana --> LLMConnector
+    Combinator --> LLMConnector
+
+    EnhancedEgo --> Config
+    Workflow --> Config
+    EmotionRedis --> Config
+    LLMConnector --> Config
+
+    EnhancedEgo --> Logger
+    Workflow --> Logger
+    EmotionRedis --> Logger
+    LLMConnector --> Logger
+
+    EnhancedEgo --> ErrorHandler
+    Workflow --> ErrorHandler
+    LLMConnector --> ErrorHandler
+
+    style FrontendModules fill:#3b82f6,color:#fff
+    style BackendModules fill:#10b981,color:#fff
+    style CoreAgents fill:#8b5cf6,color:#fff
+    style EmotionModules fill:#f59e0b,color:#fff
+    style Infrastructure fill:#6366f1,color:#fff
+                </div>
+            </div>
+            <div class="file-reference">
+                <strong>Dependency Files:</strong> All Python modules in app/ directory, frontend/src/ directory
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section id="techstack" class="diagram-section">
+            <h2>7. Technology Stack</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <h4>Frontend</h4>
+                    <ul>
+                        <li>React 18</li>
+                        <li>TypeScript</li>
+                        <li>Vite</li>
+                        <li>TailwindCSS</li>
+                        <li>Recharts</li>
+                        <li>Axios</li>
+                    </ul>
+                </div>
+                <div class="tech-item">
+                    <h4>Backend</h4>
+                    <ul>
+                        <li>Python 3.10+</li>
+                        <li>FastAPI</li>
+                        <li>Uvicorn</li>
+                        <li>Pydantic</li>
+                        <li>WebSockets</li>
+                    </ul>
+                </div>
+                <div class="tech-item">
+                    <h4>AI/ML</h4>
+                    <ul>
+                        <li>Ollama (Local LLM)</li>
+                        <li>qwen3:8b Model</li>
+                        <li>HuggingFace Transformers</li>
+                        <li>GoEmotions Model</li>
+                    </ul>
+                </div>
+                <div class="tech-item">
+                    <h4>Data Storage</h4>
+                    <ul>
+                        <li>Redis (Short-term)</li>
+                        <li>JSON Files (Long-term)</li>
+                        <li>In-Memory (Ego State)</li>
+                    </ul>
+                </div>
+                <div class="tech-item">
+                    <h4>Utilities</h4>
+                    <ul>
+                        <li>python-dotenv</li>
+                        <li>Matplotlib</li>
+                        <li>NumPy</li>
+                        <li>Logging</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#3b82f6',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#2563eb',
+                lineColor: '#6b7280',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#8b5cf6'
+            }
+        });
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+
+        // Smooth scroll to section
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Update Mermaid theme on theme change
+        const observer = new MutationObserver(() => {
+            const theme = document.body.getAttribute('data-theme');
+            mermaid.initialize({ 
+                startOnLoad: false,
+                theme: theme === 'dark' ? 'dark' : 'default'
+            });
+        });
+
+        observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+    </script>
+</body>
+</html>
+
